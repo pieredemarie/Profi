@@ -1,13 +1,19 @@
 .DS_Store
 .env
 
-
 /server/vendor/
-/server/storage/
 /server/.env
 /server/node_modules/
 /server/.vscode
 /server/.idea
+
+# Laravel generated/runtime files
+/server/storage/*.key
+/server/storage/framework/cache/*
+/server/storage/framework/sessions/*
+/server/storage/framework/views/*
+/server/storage/logs/*.log
+/server/bootstrap/cache/*.php
 
 /client/node_modules/
 /client/build/
@@ -15,5 +21,4 @@
 /client/.env
 /client/.idea
 /client/.vscode
-
 
