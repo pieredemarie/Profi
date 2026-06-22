@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('domestic_product_name');
             $table->string('registry_number')
                 ->nullable();
-            $table->json('software_class')
+            $table->json('software_classes')
                 ->nullable();
             $table->timestamps();
         });
