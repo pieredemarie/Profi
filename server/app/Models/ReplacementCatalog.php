@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+
+class ReplacementCatalog extends Model
+{
+    protected $fillable = [
+        'foreign_product_name',
+        'domestic_product_name',
+        'registry_number',
+        'software_classes',
+    ];
+    protected $casts = [
+        'software_classes' => 'array',
+    ];
+
+    public function partnerReplacements(){
+
+        return $this->hasMany(PartnerReplacement::class, 'registry_number', 'registry_number');
+
+    }
+}
