@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('replacement_catalogs', function (Blueprint $table) {
+        Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->text('foreign_product_name');
-            $table->text('domestic_product_name');
-            $table->string('registry_number')
-                ->nullable()
-                ->index();
-            $table->json('software_classes')
+            $table->text('full_name')
                 ->nullable();
+            $table->string('phone_number');
+            $table->text('foreign_product_name');
+            $table->json('partner_replacement_list')
+                ->nullable();
+                
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('replacement_catalogs');
+        Schema::dropIfExists('applications');
     }
 };
