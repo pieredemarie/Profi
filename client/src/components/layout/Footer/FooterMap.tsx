@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './FooterMap.css';
 
-// Импорты для исправления стандартной иконки (можно оставить для подложки, но мы её не используем)
+
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -23,9 +23,9 @@ interface FooterMapProps {
 }
 
 export const FooterMap: React.FC<FooterMapProps> = ({ center, zoom = 16, address }) => {
-    // Создаём кастомную иконку через HTML + CSS (красный круг, домик, подпись)
+
     const customIcon = L.divIcon({
-        className: 'custom-marker-wrapper', // Просто оболочка, мы стилизуем через CSS ниже
+        className: 'custom-marker-wrapper',
         html: `
             <div class="custom-marker">
                 <div class="custom-marker__circle">
@@ -37,8 +37,8 @@ export const FooterMap: React.FC<FooterMapProps> = ({ center, zoom = 16, address
                 <div class="custom-marker__label">${address}</div>
             </div>
         `,
-        iconSize: [200, 60], // Размер всей иконки (широкий, чтобы поместился текст)
-        iconAnchor: [100, 30], // Центр иконки (чтобы острие круга смотрело в точку)
+        iconSize: [200, 60], // Размер всей иконки
+        iconAnchor: [100, 30], // Центр иконки
         popupAnchor: [0, -30],
     });
 
@@ -54,7 +54,7 @@ export const FooterMap: React.FC<FooterMapProps> = ({ center, zoom = 16, address
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* Ставим кастомный маркер вместо стандартного */}
+
             <Marker position={center} icon={customIcon}>
                 <Popup>{address}</Popup>
             </Marker>
