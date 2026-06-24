@@ -34,5 +34,15 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'external_files' => [
+        'source_one' => [
+            'url' => env('EXTERNAL_FILE_SOURCE_ONE_URL'),
+            'path' => 'imports/source-one/latest.xlsx',
+        ],
 
+        'source_two' => [
+            'url' => env('EXTERNAL_FILE_SOURCE_TWO_URL'),
+            'path' => 'imports/source-two/latest.xlsx',
+        ],
+    ],
 ];
