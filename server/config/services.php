@@ -35,14 +35,16 @@ return [
         ],
     ],
     'external_files' => [
-        'source_one' => [
-            'url' => env('EXTERNAL_FILE_SOURCE_ONE_URL'),
-            'path' => 'imports/source-one/latest.xlsx',
-        ],
-
-        'source_two' => [
-            'url' => env('EXTERNAL_FILE_SOURCE_TWO_URL'),
-            'path' => 'imports/source-two/latest.xlsx',
-        ],
+    'source_one' => [
+        'url' => env('EXTERNAL_FILE_SOURCE_ONE_URL'),
+        'latest_path' => 'imports/source-one/latest.xlsx',
+        'archive_dir' => 'imports/source-one/archive',
     ],
+
+    'source_two' => [
+        'url' => env('EXTERNAL_FILE_SOURCE_TWO_URL'),
+        'latest_path' => 'imports/source-two/latest.xlsx',
+        'archive_dir' => 'imports/source-two/archive',
+    ],
+],
 ];

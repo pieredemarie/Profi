@@ -25,7 +25,8 @@ class DownloadExternalFile extends Command
         }
 
         $url = $config['url'];
-        $path = $config['path'];
+        $latestPath = $config['latest_path'];
+        $archiveDir = $config['archive_dir'];
 
         if (! $url) {
             $this->error("Missing URL for source: $source");
@@ -48,10 +49,18 @@ class DownloadExternalFile extends Command
             return self::FAILURE;
         }
 
-        Storage::put($path, $response->body());
+        $contents = $response->body();
 
-        $this->info("File downloaded successfully.");
-        $this->info("Saved to: $path");
+        $timestamp = now()->format('Y-m-d_His');
+
+        $archivePath = $archiveDir . '/' . $timestamp . '.xlsx';
+
+        Storage::put($latestPath, $contents);
+        Storage::put($archivePath, $contents);
+
+        $this->info('File downloaded successfully.');
+        $this->info("Latest saved to: $latestPath");
+        $this->info("Archive saved to: $archivePath");
 
         return self::SUCCESS;
     }
