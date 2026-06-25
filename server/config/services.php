@@ -34,5 +34,17 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'external_files' => [
+    'import_replacement' => [
+        'url' => env('IMPORT_REPLACEMENT_URL'),
+        'latest_path' => 'imports/import_replacement/latest.xlsx',
+        'archive_dir' => 'imports/import_replacement/archive',
+    ],
 
+    'registry_export' => [
+        'url' => env('REGISTRY_EXPORT_URL'),
+        'latest_path' => 'imports/registry_export/latest.xlsx',
+        'archive_dir' => 'imports/registry_export/archive',
+    ],
+],
 ];
