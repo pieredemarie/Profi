@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class ReplacementCatalog extends Model
+class ImportReplacement extends Model
 {
     protected $fillable = [
         'foreign_product_name',

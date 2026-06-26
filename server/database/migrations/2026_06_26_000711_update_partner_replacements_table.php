@@ -20,11 +20,11 @@ return new class extends Migration
                 ->constrained('import_batches')
                 ->nullOnDelete();
 
-            $table->foreignId('partner_list_id')
+            $table->foreignId('partner_organisation_id')
 
                 ->nullable()
                 ->after('import_batch_id')
-                ->constrained('partner_lists')
+                ->constrained('partner_organisations')
                 ->nullOnDelete();
 
         });
@@ -37,7 +37,7 @@ return new class extends Migration
     {
         Schema::table('partner_replacements', function (Blueprint $table) {
 
-            $table->dropConstrainedForeignId('partner_company_id');
+            $table->dropConstrainedForeignId('partner_organisation_id');
             $table->dropConstrainedForeignId('import_batch_id');
 
         });

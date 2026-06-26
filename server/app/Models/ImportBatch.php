@@ -21,7 +21,7 @@ class ImportBatch extends Model
 
     public function replacementCatalogs(){
 
-        return $this->hasMany(ReplacementCatalog::class);
+        return $this->hasMany(ImportReplacement::class);
 
     }
 

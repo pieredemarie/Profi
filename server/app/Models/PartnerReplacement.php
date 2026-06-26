@@ -19,15 +19,15 @@ class PartnerReplacement extends Model
 
     }
 
-    public function partnerList(){
+    public function partnerOrganisation(){
 
-        return $this->belongsTo(PartnerList::class);
+        return $this->belongsTo(PartnerOrganisation::class);
 
     }
 
     public function catalogueRows(){
 
-        return $this->hasMany(ReplacementCatalog::class, 'registry number', 'registry number');
+        return $this->hasMany(ImportReplacement::class, 'registry number', 'registry number');
         
     }
 }
