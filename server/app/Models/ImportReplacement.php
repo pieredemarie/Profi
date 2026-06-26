@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class ReplacementCatalog extends Model
+class ImportReplacement extends Model
 {
     protected $fillable = [
         'foreign_product_name',
@@ -17,6 +17,12 @@ class ReplacementCatalog extends Model
         'software_classes' => 'array',
     ];
 
+    public function importBatch(){
+
+        return $this->belongsTo(ImportBatch::class);
+
+    }
+    
     public function partnerReplacements(){
 
         return $this->hasMany(PartnerReplacement::class, 'registry_number', 'registry_number');

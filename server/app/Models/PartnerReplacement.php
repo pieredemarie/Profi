@@ -12,9 +12,22 @@ class PartnerReplacement extends Model
         'registry_number',
     ];
 
+
+    public function importBatch(){
+
+        return $this->belongsTo(ImportBatch::class);
+
+    }
+
+    public function partnerOrganisation(){
+
+        return $this->belongsTo(PartnerOrganisation::class);
+
+    }
+
     public function catalogueRows(){
 
-        return $this->hasMany(ReplacementCatalog::class, 'registry number', 'registry number');
+        return $this->hasMany(ImportReplacement::class, 'registry number', 'registry number');
         
     }
 }
