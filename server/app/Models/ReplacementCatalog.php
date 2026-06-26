@@ -17,6 +17,12 @@ class ReplacementCatalog extends Model
         'software_classes' => 'array',
     ];
 
+    public function importBatch(){
+
+        return $this->belongsTo(ImportBatch::class);
+
+    }
+    
     public function partnerReplacements(){
 
         return $this->hasMany(PartnerReplacement::class, 'registry_number', 'registry_number');
