@@ -10,9 +10,8 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-Schedule::command('external-file:download source_one')
-    ->weekly()
-    ->withoutOverlapping();
+Schedule::command('import:replacements')
+    ->weekly();
 
 Schedule::command('external-file:download source_two')
     ->weekly()
