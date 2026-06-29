@@ -1,0 +1,105 @@
+.card-item {
+    background-color: #ffffff;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 48px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    border-left: 16px solid #216FA3;
+    height: 381px;
+}
+
+.card-item__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-right: 240px; /* Отступ, чтобы текст не заходил под правый блок */
+    z-index: 2;
+    text-align: left;
+}
+
+.card-item__title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 24px;
+}
+
+.card-item__description {
+    font-family: 'Mulish', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 100%;
+    max-width: 672px;
+    color: #000000;
+    margin-bottom: 24px;
+}
+
+.card-item__button {
+    align-self: flex-start;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px 12px 32px;
+    margin-top: 24px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.card-item__button:hover {
+    transition: all 0.2s;
+    box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+}
+
+
+.card-item__corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 218px;
+    height: 229px;
+    background-color: #216FA3;
+    border-radius: 16px 0 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.card-item__images-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.card-item__image {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+}
+
+.card-item__images-wrapper:has(.card-item__image:nth-child(2)) .card-item__image {
+    max-width: 45%;
+    max-height: 75%;
+}
