@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
                 <div className="footer__container">
                     <h2 className="footer__title">Контактная информация</h2>
                     <div className="footer__info-row">
-                        <span className="footer__info-item">ООО «УЦ ПРОФИ»</span>
+                        <span className="footer__info-item underlined">profi-uc.ru</span>
 
 
                         <span className="footer__info-item">
