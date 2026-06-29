@@ -79,6 +79,9 @@
     align-items: center;
     justify-content: center;
     z-index: 1;
+
+    /*для стиля scale (2 картинка) на случай если картинка увеличится */
+    overflow: hidden;
 }
 
 .card-item__images-wrapper {
@@ -89,17 +92,29 @@
     gap: 12px;
     width: 100%;
     height: 100%;
-    padding: 20px;
     box-sizing: border-box;
 }
 
 .card-item__image {
-    max-width: 85%;
-    max-height: 85%;
     object-fit: contain;
+    flex-shrink: 0;
 }
 
-.card-item__images-wrapper:has(.card-item__image:nth-child(2)) .card-item__image {
-    max-width: 45%;
-    max-height: 75%;
+/* Одна картинка — занимает большую часть блока */
+.card-item__images-wrapper:not(:has(.card-item__image:nth-child(2))) .card-item__image {
+    max-width: 85%;
+    max-height: 85%;
+}
+
+.card-item__images-wrapper:has(.card-item__image:nth-child(2)) .card-item__image:nth-child(1) {
+    width: 74px;
+    height: 140px;
+    object-fit: fill;
+}
+
+.card-item__images-wrapper:has(.card-item__image:nth-child(2)) .card-item__image:nth-child(2) {
+    width: 106px;
+    height: 106px;
+    object-fit: contain;
+    transform: scale(1.4);
 }
