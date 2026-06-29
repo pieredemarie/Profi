@@ -16,18 +16,19 @@ export const Footer: React.FC = () => {
 
 
                         <span className="footer__info-item">
-                            <svg className="footer__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                           <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.43 11.685C7.59 15.93 11.07 19.395 15.315 21.57L18.615 18.27C19.02 17.865 19.62 17.73 20.145 17.91C21.825 18.465 23.64 18.765 25.5 18.765C26.325 18.765 27 19.44 27 20.265V25.5C27 26.325 26.325 27 25.5 27C11.415 27 0 15.585 0 1.5C0 0.675 0.675 0 1.5 0H6.75C7.575 0 8.25 0.675 8.25 1.5C8.25 3.375 8.55 5.175 9.105 6.855C9.27 7.38 9.15 7.965 8.73 8.385L5.43 11.685Z" fill="white"/>
                             </svg>
+
                             +7 (4932) 58-68-78
                         </span>
 
 
                         <span className="footer__info-item">
-                            <svg className="footer__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" />
+                           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                             <path d="M18.0001 3C11.3836 3 6.00012 8.3835 6.00012 14.9925C5.95662 24.66 17.5441 32.676 18.0001 33C18.0001 33 30.0436 24.66 30.0001 15C30.0001 8.3835 24.6166 3 18.0001 3ZM18.0001 21C14.6851 21 12.0001 18.315 12.0001 15C12.0001 11.685 14.6851 9 18.0001 9C21.3151 9 24.0001 11.685 24.0001 15C24.0001 18.315 21.3151 21 18.0001 21Z" fill="white"/>
                             </svg>
+
                             г. Иваново, ул. Уткина, 13
                         </span>
                     </div>
