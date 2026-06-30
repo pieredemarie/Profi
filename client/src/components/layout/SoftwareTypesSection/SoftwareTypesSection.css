@@ -1,0 +1,62 @@
+.software-types-section {
+    width: 100%;
+    background-color: #FFFFFF;
+    padding: 60px 0 60px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.software-types-section__container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.software-types-section__title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 12px;
+}
+
+.software-types-section__subtitle {
+    font-family: 'Mulish', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 100px;
+
+}
+
+.software-types-section__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.software-types-section__btn {
+    background-color: #F4F4F4;
+    border: 1px solid #b0b0b0;
+    border-radius: 32px;
+    padding: 16px 32px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #000000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.software-types-section__btn:hover {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
