@@ -2,101 +2,170 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\ImportBatch;
 use App\Imports\ImportReplacementRows;
+use App\Models\ImportBatch;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class ImportReplacements extends Command
 {
     protected $signature = 'import:replacements';
+
     protected $description = 'Download and delta import ImportReplacement from Excel';
 
-    public function handle()
+    public function handle(): int
     {
-
         $this->info('Downloading latest file...');
-        $this->call('external-file:download', ['source'=>'import_replacement']);
+
+        $downloadStatus = $this->call('external-file:download', [
+            'source' => 'import_replacement',
+        ]);
+
+        if ($downloadStatus !== self::SUCCESS) {
+            $this->error('Download failed.');
+
+            return self::FAILURE;
+        }
 
         $filePath = storage_path('app/private/imports/import_replacement/latest.xlsx');
 
-        if (!file_exists($filePath)) {
-            $this->error('Download failed – file not found.');
-            return 1;
+        if (! file_exists($filePath)) {
+            $this->error('Download failed - file not found.');
+
+            return self::FAILURE;
         }
 
-
         $batch = ImportBatch::create([
-            'type'        => 'import_replacement',
-            'file_name'   => basename($filePath),
-            'source_url'  => $filePath,
-            'status'      => 'processing',
-            'rows_total'  => 0,
-            'rows_success'=> 0,
-            'rows_failure'=> 0,
+            'type' => 'import_replacement',
+            'file_name' => basename($filePath),
+            'source_url' => $filePath,
+            'status' => 'processing',
+            'rows_total' => 0,
+            'rows_success' => 0,
+            'rows_failure' => 0,
         ]);
 
         try {
-
             DB::table('import_replacement_staging')->truncate();
 
             Excel::import(new ImportReplacementRows($batch->id), $filePath);
 
             $totalRows = DB::table('import_replacement_staging')->count();
-            $batch->update(['rows_total' => $totalRows]);
+
+            $uniqueRows = DB::query()
+                ->fromSub(
+                    DB::table('import_replacement_staging')
+                        ->select('foreign_product_name', 'domestic_product_name')
+                        ->distinct(),
+                    'unique_replacements'
+                )
+                ->count();
 
             if ($totalRows === 0) {
-                throw new \Exception('No rows with registry numbers found.');
+                throw new \RuntimeException('No import replacement rows found.');
             }
 
+            $batch->update([
+                'rows_total' => $totalRows,
+            ]);
 
-            DB::transaction(function () use ($batch, $totalRows) {
+            DB::transaction(function () use (&$deletedRows, &$updatedRows, &$insertedRows): void {
+                $deletedRows = DB::affectingStatement('
+                    DELETE live
+                    FROM import_replacements live
+                    LEFT JOIN (
+                        SELECT DISTINCT
+                            foreign_product_name,
+                            domestic_product_name
+                        FROM import_replacement_staging
+                    ) staging
+                        ON staging.foreign_product_name = live.foreign_product_name
+                        AND staging.domestic_product_name = live.domestic_product_name
+                    WHERE staging.foreign_product_name IS NULL
+                ');
 
-                DB::table('import_replacements as live')
-                    ->leftJoin('import_replacement_staging as staging', function ($join) {
-                        $join->on('live.foreign_product_name', '=', 'staging.foreign_product_name')
-                             ->on('live.registry_number', '=', 'staging.registry_number');
-                    })
-                    ->whereNull('staging.foreign_product_name')
-                    ->delete();
+                $updatedRows = DB::affectingStatement('
+                    UPDATE import_replacements live
+                    INNER JOIN (
+                        SELECT
+                            foreign_product_name,
+                            domestic_product_name,
+                            MAX(registry_number) AS registry_number,
+                            MAX(software_class) AS software_class
+                        FROM import_replacement_staging
+                        GROUP BY foreign_product_name, domestic_product_name
+                    ) staging
+                        ON staging.foreign_product_name = live.foreign_product_name
+                        AND staging.domestic_product_name = live.domestic_product_name
+                    SET
+                        live.registry_number = staging.registry_number,
+                        live.software_class = staging.software_class,
+                        live.updated_at = NOW()
+                    WHERE NOT (live.registry_number <=> staging.registry_number)
+                       OR NOT (live.software_class <=> staging.software_class)
+                ');
 
-                DB::statement('
+                $insertedRows = DB::affectingStatement('
                     INSERT INTO import_replacements
-                        (foreign_product_name, domestic_product_name, registry_number, software_class, import_batch_id, created_at, updated_at)
+                        (
+                            foreign_product_name,
+                            domestic_product_name,
+                            registry_number,
+                            software_class,
+                            import_batch_id,
+                            created_at,
+                            updated_at
+                        )
                     SELECT
-                        foreign_product_name,
-                        domestic_product_name,
-                        registry_number,
-                        software_class,
-                        import_batch_id,
+                        staging.foreign_product_name,
+                        staging.domestic_product_name,
+                        staging.registry_number,
+                        staging.software_class,
+                        staging.import_batch_id,
                         NOW(),
                         NOW()
-                    FROM import_replacement_staging
-                    ON DUPLICATE KEY UPDATE
-                        domestic_product_name = VALUES(domestic_product_name),
-                        software_class = VALUES(software_class),
-                        import_batch_id    = VALUES(import_batch_id),
-                        updated_at         = NOW()
+                    FROM (
+                        SELECT
+                            foreign_product_name,
+                            domestic_product_name,
+                            MAX(registry_number) AS registry_number,
+                            MAX(software_class) AS software_class,
+                            MAX(import_batch_id) AS import_batch_id
+                        FROM import_replacement_staging
+                        GROUP BY foreign_product_name, domestic_product_name
+                    ) staging
+                    LEFT JOIN import_replacements live
+                        ON live.foreign_product_name = staging.foreign_product_name
+                        AND live.domestic_product_name = staging.domestic_product_name
+                    WHERE live.id IS NULL
                 ');
             });
 
             $batch->update([
-                'status'       => 'completed',
-                'rows_success' => $totalRows,
+                'status' => 'completed',
+                'rows_success' => $uniqueRows,
+                'rows_failure' => max(0, $totalRows - $uniqueRows),
             ]);
 
-            $this->info("Import completed – $totalRows rows processed.");
+            $this->info("Import completed.");
+            $this->info("Rows staged: $totalRows");
+            $this->info("Unique rows: $uniqueRows");
+            $this->info("Inserted: $insertedRows");
+            $this->info("Updated: $updatedRows");
+            $this->info("Deleted: $deletedRows");
 
-        } catch (\Exception $e) {
+            return self::SUCCESS;
+        } catch (Throwable $e) {
             $batch->update([
-                'status'        => 'failed',
+                'status' => 'failed',
                 'error_message' => $e->getMessage(),
             ]);
-            $this->error('Import failed: ' . $e->getMessage());
-            return 1;
-        }
 
-        return 0;
+            $this->error('Import failed: '.$e->getMessage());
+
+            return self::FAILURE;
+        }
     }
 }
