@@ -1,0 +1,82 @@
+/* src/components/sections/Search/Search.css */
+
+.search {
+    width: 100%;
+    height: 612px; /* Высота увеличилась из-за тегов */
+    background-color: #F6F6F6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.search__container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search__title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 16px;
+    width: 1208px;
+}
+
+.search__subtitle {
+    font-family: 'Mulish', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 100px; /* Уменьшили отступ, чтобы поместились теги */
+}
+
+.search__search-wrapper {
+    width: 100%;
+    margin-bottom: 40px; /* Отступ до тегов */
+}
+
+/* --- Стили для тегов "Часто ищут..." --- */
+.search__tags-container {
+    width: 100%;
+    max-width: 1208px;
+}
+
+.search__tags-title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #7C7C7C;
+    margin-bottom: 12px;
+}
+
+.search__tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+.search__tag {
+    background-color: transparent;
+    border: 1px solid #B1B1B1;
+    border-radius: 32px;
+    padding: 12px 32px 12px 32px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #B0B0B0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search__tag:hover {
+    background-color: #B1B1B1;
+    color: #F4F4F4;
+}
