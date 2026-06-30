@@ -51,6 +51,7 @@
     align-items: center;
     justify-content: center;
     color: #ffffff;
+    fill: #ffffff;
 }
 
 
@@ -63,4 +64,7 @@
     width: 100%;
     height: 444px;
     z-index: 0;
+}
+.underlined {
+    text-decoration: underline;
 }
