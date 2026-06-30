@@ -68,7 +68,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                     className={`search-bar__dropdown-trigger ${isOpen ? 'open' : ''}`}
                     onClick={handleToggle}
                 >
-                    <span className="search-bar__dropdown-label">Тип ПО</span>
+                    <span className="search-bar__dropdown-label">
+                        Тип ПО{selectedTypes.length > 0 ? `: ${selectedTypes.length}` : ''}
+                    </span>
                     <div className={`search-bar__arrow ${isOpen ? 'up' : 'down'}`} />
                 </button>
 
