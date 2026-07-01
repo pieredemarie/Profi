@@ -1,0 +1,115 @@
+.consultation-form-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.consultation-form {
+    width: 1208px;
+    height: 439px;
+    background-color: #3498db;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+.consultation-form__title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.consultation-form__subtitle {
+    font-family: 'Mulish', sans-serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+
+.consultation-form__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1056px;
+}
+
+.consultation-form__row {
+    display: flex;
+    gap: 27px;
+    width: 100%;
+    justify-content: center;
+}
+
+
+.consultation-form__input {
+    width: 512px;
+    height: 62px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 16px;
+    background-color: #ffffff;
+    font-family: 'Mulish', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111111;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.consultation-form__input::placeholder {
+    color: #b0b0b0;
+}
+
+
+.consultation-form__input--error {
+    border: 2px solid #D00000;
+}
+
+
+.consultation-form__error {
+    color: #D00000;
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 6px;
+    width: 512px;
+
+
+    margin-left: calc(50% + 13.5px);
+
+
+    text-align: left;
+}
+
+
+.consultation-form__button {
+    width: 516px;
+    height: 72px;
+    margin-top: 24px;
+    background-color: #2b7ec0;
+    color: #ffffff;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.consultation-form__button:hover {
+    background-color: #1f5f92;
+}
+
