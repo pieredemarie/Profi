@@ -12,7 +12,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
 
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const softwareTypes = [
         'Антивирусное ПО',
@@ -21,18 +23,22 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
         'Корпоративные карты'
     ];
 
-    // Закрытие дропдауна при клике вне
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
+                setShowSuggestions(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleToggle = () => setIsOpen(!isOpen);
+    const handleToggle = () => {
+        setIsOpen(!isOpen);
+        setShowSuggestions(false); // если открыли тип ПО — прячем автодополнение
+    };
 
     const handleCheckboxChange = (type: string) => {
         setSelectedTypes(prev =>
@@ -44,25 +50,35 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
     };
 
     const handleSearch = () => {
+        setShowSuggestions(false);
         if (onSearch) onSearch(query);
     };
 
-    // Обработчик клика по подсказке
+    const handleInputChange = (value: string) => {
+        handleQueryChange(value);
+        setShowSuggestions(true);
+    };
+
+    const handleInputFocus = () => {
+        if (suggestions.length > 0) setShowSuggestions(true);
+    };
+
+
     const handleSuggestionClick = (value: string) => {
         handleQueryChange(value);
-        setIsOpen(false);
+        setShowSuggestions(false);
         if (onSearch) onSearch(value);
     };
 
     return (
-        <div className="search-bar__wrapper" ref={dropdownRef}>
+        <div className="search-bar__wrapper" ref={wrapperRef}>
 
-            {/* 1. Инпут с автодополнением (ЕДИНЫЙ БЛОК) */}
+
             <div className="search-bar__input-wrapper">
                 <div className="search-bar__dropdown-group">
 
-                    {/* Верхняя часть: Инпут с лупой */}
-                    <div className="search-bar__input-container">
+
+                    <div className={`search-bar__input-container ${showSuggestions && suggestions.length > 0 ? 'has-suggestions' : ''}`}>
                         <svg className="search-bar__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b0b0b0" strokeWidth="2">
                             <circle cx="11" cy="11" r="8" />
                             <path d="M21 21L16.65 16.65" />
@@ -72,13 +88,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                             className="search-bar__input"
                             placeholder="Например: FortiGate IPS"
                             value={query}
-                            onChange={(e) => handleQueryChange(e.target.value)}
+                            onChange={(e) => handleInputChange(e.target.value)}
+                            onFocus={handleInputFocus}
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         />
                     </div>
 
-                    {/* Нижняя часть: Список подсказок */}
-                    {suggestions.length > 0 && (
+
+                    {showSuggestions && suggestions.length > 0 && (
                         <div className="search-bar__suggestions">
                             {suggestions.map((item) => (
                                 <div
@@ -94,7 +111,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                 </div>
             </div>
 
-            {/* 2. Кастомный Dropdown с чекбоксами */}
+
             <div className="search-bar__dropdown-wrapper">
                 <button
                     className={`search-bar__dropdown-trigger ${isOpen ? 'open' : ''}`}
@@ -107,7 +124,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                 </button>
 
                 {isOpen && (
-                    <div className="search-bar__dropdown-menu">
+                    <div className="search-bar__dropdown-menu open">
                         {softwareTypes.map((type) => (
                             <label key={type} className="search-bar__dropdown-item">
                                 <span className="search-bar__dropdown-text">{type}</span>
@@ -123,7 +140,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                 )}
             </div>
 
-            {/* 3. Кнопка поиска */}
+
             <button className="search-bar__button" onClick={handleSearch}>
                 Найти решения
             </button>

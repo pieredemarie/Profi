@@ -14,7 +14,7 @@ export const apiClient = axios.create({
 
 
 apiClient.interceptors.request.use((config) => {
-    // Laravel хранит CSRF токен в куках с именем XSRF-TOKEN
+
     const token = document.cookie
         .split('; ')
         .find(row => row.startsWith('XSRF-TOKEN='))
