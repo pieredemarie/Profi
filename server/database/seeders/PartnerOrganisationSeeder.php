@@ -16,7 +16,7 @@ class PartnerOrganisationSeeder extends Seeder
         DB::table('partner_organisations')->insert([
             [
                 'organisation_name' => 'ООО "АКСОФТ"',
-                'tin' => '272924947',
+                'tin' => '0272924947',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -13,6 +13,6 @@ Artisan::command('inspire', function () {
 Schedule::command('import:replacements')
     ->weekly();
 
-Schedule::command('external-file:download source_two')
+Schedule::command('import:partner-replacements')
     ->weekly()
     ->withoutOverlapping();
