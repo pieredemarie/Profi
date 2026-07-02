@@ -4,11 +4,13 @@ import {Footer} from "./components/layout/Footer/Footer.tsx";
 import {Search} from "./components/layout/SearchBar/Search.tsx";
 import {SoftwareTypesSection} from "./components/layout/SoftwareTypesSection/SoftwareTypesSection.tsx";
 
+
 function App() {
 
   return (
     <>
       <Header/>
+
         <Search/>
         <SoftwareTypesSection/>
         <BlueBanner/>
