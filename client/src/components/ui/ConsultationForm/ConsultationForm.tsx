@@ -66,7 +66,7 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ onSend }) =>
 
     return (
         <>
-        <div className="consultation-form-wrapper">
+        <div className="consultation-form-wrapper" id="consultation-form">
             <div className="consultation-form">
                 <h2 className="consultation-form__title">Получить консультацию</h2>
                 <p className="consultation-form__subtitle">Заполните поля заявки</p>

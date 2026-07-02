@@ -1,0 +1,110 @@
+/* Основная карточка: 384x278 */
+.product-card {
+    width: 384px;
+    height: 278px;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    position: relative;
+    box-sizing: border-box;
+    padding: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Синяя полоска слева (10px шириной) */
+.product-card__left-stripe {
+    width: 10px;
+    background-color: #3498db;
+    flex-shrink: 0;
+}
+
+/* Внутренний контент (отступы 16px со всех сторон, кроме левой) */
+.product-card__content {
+    flex: 1;
+    padding: 16px 16px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* Плашка с типом ПО: 114x21, радиус 16 */
+.product-card__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 114px;
+    height: 21px;
+    background-color: #3498db;
+    border-radius: 16px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+}
+
+/* Заголовок: 24px жирный */
+.product-card__title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111111;
+    margin: 12px 0 0 0;
+    line-height: 1.2;
+}
+
+/* Подзаголовок (реестр): 14px, 400 weight */
+.product-card__registry {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #111111;
+    margin: 4px 0 0 0;
+}
+
+/* Блок "Заменяет:" */
+.product-card__replaces-wrapper {
+    margin-top: 8px;
+}
+
+/* Текст "Заменяет:" 14px, черный #000000 */
+.product-card__replaces-label {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0 0 4px 0;
+}
+
+/* Список замен: 12px, серый #B0B0B0 */
+.product-card__replaces-list {
+    font-family: 'Mulish', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #b0b0b0;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Кнопка: 220x36, радиус 12 */
+.product-card__button {
+    width: 220px;
+    height: 36px;
+    margin-top: auto; /* Прижимает кнопку к низу карточки */
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    align-self: flex-start; /* Кнопка прижата к левому краю (как на макете) */
+}
+
+.product-card__button:hover {
+    background-color: #2980b9;
+}
