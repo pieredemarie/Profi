@@ -1,5 +1,6 @@
 import React from 'react';
 import './SuccessModal.css';
+import { Link } from "react-router-dom";
 
 interface SuccessModalProps {
     isOpen: boolean;
@@ -7,11 +8,26 @@ interface SuccessModalProps {
 }
 
 export const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
-
+    // Вместо удаления из DOM, мы управляем видимостью через CSS-класс
     return (
-        <div className="success-modal__overlay" onClick={onClose}>
+        <div
+            className={`success-modal__overlay ${isOpen ? 'success-modal--open' : ''}`}
+            onClick={onClose}
+        >
             <div className="success-modal__content" onClick={(e) => e.stopPropagation()}>
+
+                {/* Кнопка-крестик для закрытия */}
+                <button className="success-modal__close" onClick={onClose} aria-label="Закрыть">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M29 3L3 29M3 3L29 29"
+                            stroke="#606060"
+                            strokeWidth="6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </button>
 
                 <div className="success-modal__icon-wrapper">
                     <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,17 +35,15 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) =
                     </svg>
                 </div>
 
-
                 <h2 className="success-modal__title">Заявка отправлена!</h2>
                 <p className="success-modal__subtitle">
                     В ближайшее время с вами свяжется наш<br />
                     менеджер по телефону
                 </p>
 
-
-                <button className="success-modal__button" onClick={onClose}>
+                <Link to="/" className="success-modal__button" onClick={onClose}>
                     На главную
-                </button>
+                </Link>
             </div>
         </div>
     );
