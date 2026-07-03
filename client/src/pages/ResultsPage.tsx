@@ -91,7 +91,7 @@ export const ResultsPage = () => {
 
     return (
         <div className="results-page">
-            <Header showShadow={false} />
+            <Header showShadow={false} showHomeButton={true}/>
 
             <div className="results-page__blue-header">
                 <div className="results-page__blue-container">
