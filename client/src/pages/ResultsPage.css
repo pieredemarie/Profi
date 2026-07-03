@@ -1,0 +1,130 @@
+/* Общий контейнер */
+.results-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================================================== */
+/* 1. СИНИЙ БЛОК (1920x384, фон #3498DB) */
+/* ========================================================== */
+.results-page__blue-header {
+    width: 100%;
+    height: 384px;
+    background-color: #3498db;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.results-page__blue-container {
+    width: 1056px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: visible;
+}
+
+.results-page__main-title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    width: 100%;
+    white-space: normal;   /* базовое поведение, <br /> сам создаёт перенос */
+    line-height: 1.2;
+}
+
+.results-page__main-title span {
+    white-space: nowrap;   /* название решения не должно ломаться по словам */
+    display: inline-block;
+}
+
+/* Подчеркнутый текст (название программы) */
+.results-page__main-title--underline {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ========================================================== */
+/* 2. ОСНОВНОЙ КОНТЕНТ (карточки) */
+/* ========================================================== */
+.results-page__main {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 48px 20px 60px;
+}
+
+.results-page__group {
+    margin-bottom: 48px;
+}
+
+.results-page__group-title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111111;
+    margin-bottom: 24px;
+}
+
+.results-page__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(384px, 1fr));
+    gap: 24px;
+}
+
+.results-page__form-wrapper {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ========================================================== */
+/* 3. СТРОКА ПОИСКА НА СТРАНИЦЕ РЕЗУЛЬТАТОВ (неактивная) */
+/* ========================================================== */
+.results-page__search-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 86px;
+}
+
+.results-page__search-input,
+.results-page__search-select,
+.results-page__search-button {
+    height: 56px;
+    border-radius: 24px;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    padding: 0 24px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 18px;
+    color: #111111;
+    opacity: 0.7;
+    pointer-events: none; /* Делает элементы неактивными */
+    user-select: none;
+}
+
+.results-page__search-input {
+    width: 400px;
+}
+
+.results-page__search-select {
+    width: 200px;
+}
+
+.results-page__search-button {
+    width: 220px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+}
