@@ -35,7 +35,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
                 {/* Номер в реестре */}
                 <p className="product-card__registry">
-                    № в реестре СРПО: {registryNumber}
+                    № в реестре СРПО: <b>{registryNumber}</b>
                 </p>
 
                 {/* Блок "Заменяет:" */}

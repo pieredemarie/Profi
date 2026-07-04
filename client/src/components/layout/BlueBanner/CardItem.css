@@ -57,6 +57,7 @@
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
+    text-decoration: none;
 }
 
 .card-item__button:hover {
@@ -78,7 +79,7 @@
     justify-content: center;
     z-index: 1;
 
-    /*для стиля scale (2 картинка) на случай если картинка увеличится */
+
     overflow: hidden;
 }
 

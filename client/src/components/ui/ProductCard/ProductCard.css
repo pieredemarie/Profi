@@ -1,6 +1,6 @@
 /* Основная карточка: 384x278 */
 .product-card {
-    width: 384px;
+    width: 582px;
     height: 278px;
     background-color: #ffffff;
     border: 1px solid #d1d5db;
@@ -19,7 +19,7 @@
     flex-shrink: 0;
 }
 
-/* Внутренний контент (отступы 16px со всех сторон, кроме левой) */
+
 .product-card__content {
     flex: 1;
     padding: 16px 16px 16px 12px;
@@ -35,12 +35,12 @@
     justify-content: center;
     width: fit-content;
     max-width: 100%;
-    height: 21px;              /* фиксированная высота, как в макете */
-    padding: 0 12px;           /* только горизонтальные отступы под текст */
+    height: 26px;
+    padding: 0 12px;
     background-color: #3498db;
     border-radius: 16px;
     font-family: 'Mulish', sans-serif;
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 700;
     color: #ffffff;
     text-align: center;
@@ -85,7 +85,7 @@
 /* Список замен: 12px, серый #B0B0B0 */
 .product-card__replaces-list {
     font-family: 'Mulish', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     color: #b0b0b0;
     margin: 0;
@@ -94,7 +94,7 @@
 
 /* Кнопка: 220x36, радиус 12 */
 .product-card__button {
-    width: 220px;
+    width: 244px;
     height: 36px;
     margin-top: auto; /* Прижимает кнопку к низу карточки */
     background-color: #3498db;
