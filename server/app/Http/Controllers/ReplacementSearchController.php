@@ -6,7 +6,7 @@ use App\Models\ImportReplacement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ReplacementsBySoftwareClass extends Controller
+class ReplacementSearchController extends Controller
 {
     public function softwareClasses(): JsonResponse
     {
@@ -77,5 +77,57 @@ class ReplacementsBySoftwareClass extends Controller
             ['\\\\', '\\%', '\\_'],
             $value
         );
+    }
+    public function partnerReplacementsByForeignProductName(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'foreign_product_name' => ['required', 'string', 'max:500'],
+        ]);
+
+        $foreignProductName = $this->normalizeQuery($validated['foreign_product_name']);
+
+        if ($foreignProductName === '') {
+            return response()->json([]);
+        }
+
+        $importReplacements = ImportReplacement::query()
+            ->select([
+                'foreign_product_name',
+                'registry_number',
+                'software_class',
+            ])
+            ->with([
+                'partnerReplacements' => function ($query): void {
+                    $query->select([
+                        'partner_product_name',
+                        'partner_organisation_name',
+                        'registry_number',
+                    ]);
+                },
+            ])
+            ->where('foreign_product_name', $foreignProductName)
+            ->whereHas('partnerReplacements')
+            ->orderBy('registry_number')
+            ->get();
+
+        $matches = $importReplacements
+            ->flatMap(function (ImportReplacement $importReplacement): array {
+                return $importReplacement->partnerReplacements
+                    ->map(fn ($partnerReplacement): array => [
+                        'partner_product_name' => $partnerReplacement->partner_product_name,
+                        'partner_organisation_name' => $partnerReplacement->partner_organisation_name,
+                        'registry_number' => $partnerReplacement->registry_number,
+                        'software_class' => $importReplacement->software_class,
+                    ])
+                    ->all();
+            })
+            ->values();
+
+        return response()->json($matches);
+    }
+
+    private function normalizeQuery(string $query): string
+    {
+        return trim(preg_replace('/\s+/u', ' ', $query));
     }
 }
