@@ -7,7 +7,7 @@ export const Search: React.FC = () => {
     const popularTags = [
         "Alient Vault", "Jira", "Microsoft Office", "SAP",
         "LogRhythm SIEM Platform", "Cisco Endpoint Secure",
-        "VMware", "Cisco IOS Intrusion", "Check Point Harmony", "Cisco IOS Intrusion", "Check Point Harmony", "Cisco IOS Intrusion", "Check Point Harmony", "Cisco IOS Intrusion", "Check Point Harmony"
+        "VMware", "Cisco IOS Intrusion",
     ];
 
     // Функция, которая срабатывает при клике на тег

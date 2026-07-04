@@ -43,3 +43,51 @@
     width: 100%;
     max-width: 1170px;
 }
+
+@media (max-width: 995px) {
+    .blue-banner {
+        padding: 40px 0 60px 0;
+    }
+
+    .blue-banner__container {
+        max-width: 990px;
+        padding: 0 135px;
+    }
+
+    /
+    .blue-banner__title {
+        font-size: 24px;
+        margin-bottom: 16px;
+        max-width: 100%;
+    }
+
+    .blue-banner__text {
+        font-size: 16px;
+        margin-bottom: 18px;
+        max-width: 100%;
+    }
+
+    .blue-banner__cards {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 590px) {
+    .blue-banner {
+        padding: 32px 0 40px 0;
+    }
+
+    .blue-banner__container {
+        padding: 0 16px;
+    }
+
+    .blue-banner__title {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .blue-banner__text {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+}

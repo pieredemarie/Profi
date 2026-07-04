@@ -55,3 +55,49 @@
     text-decoration: none;
     font-family: 'Mulish', sans-serif;
 }
+
+
+/*стили под планшеты*/
+@media (max-width: 990px) {
+    .header {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .header__container {
+        max-width: 990px;
+        padding: 0 15px;
+    }
+
+    .header__button {
+        left: 15px;
+        width: 160px;
+        height: 44px;
+        font-size: 18px;
+    }
+
+    .header__button svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 590px) {
+    .header {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .header__container {
+        padding: 0 16px;
+    }
+
+    .header__button {
+        left: 16px;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: none;
+    }
+}
+
