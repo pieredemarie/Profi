@@ -132,8 +132,23 @@
 @media (max-width: 995px) {
     .results-page__main {
         max-width: 100%;
-        padding: 40px 135px 60px; /* Боковые поля основного контента строго 135px */
+        padding: 40px 24px 60px;   /* было 135px — тот же баг, что и везде */
         box-sizing: border-box;
+    }
+
+    .results-page__blue-header {
+        height: auto;
+        padding: 32px 20px;
+    }
+
+    .results-page__blue-container {
+        width: 100%;
+        max-width: 100%;   /* было width: 1056px */
+        height: auto;
+    }
+
+    .results-page__main-title {
+        font-size: 32px;
     }
 
     .results-page__group {
@@ -158,5 +173,54 @@
     .results-page__form-wrapper {
         margin-top: 50px;
         width: 100%;
+    }
+}
+
+@media (max-width: 590px) {
+    .results-page {
+        background: linear-gradient(180deg, #FFFFF0 0%, #FFE3E3 100%);
+    }
+    .results-page__blue-header {
+        padding: 24px 16px;
+    }
+
+    .results-page__main-title {
+        font-size: 22px;
+        line-height: 1.3;
+    }
+
+    .results-page__main {
+        padding: 24px 16px 40px;
+    }
+
+    .results-page__group-title {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+
+    .results-page__group {
+        margin-bottom: 32px;
+    }
+
+    .results-page__grid {
+        gap: 16px;
+    }
+
+    .results-page__form-wrapper {
+        margin-top: 32px;
+    }
+
+    .results-page__search-wrapper {
+        margin-top: 40px;
+        padding: 0 16px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .results-page__search-input,
+    .results-page__search-select,
+    .results-page__search-button {
+        width: 100%;
+        font-size: 14px;
     }
 }

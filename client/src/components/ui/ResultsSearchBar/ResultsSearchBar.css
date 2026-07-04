@@ -174,16 +174,18 @@
 
 @media (max-width: 995px) {
     .results-search-bar__wrapper {
-        flex-direction: row;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: center;
         gap: 30px;
         max-width: 100%;
-        padding: 0 135px;
+        padding: 0 24px;
     }
 
     .results-search-bar__input-wrapper {
-        width: 307px;
+        width: auto;
+        flex: 1 1 auto;
+        min-width: 200px;
         height: 40px;
         background-color: #F4F4F4;
         border: 1px solid #717171;
@@ -304,7 +306,7 @@
         padding: 0 24px;
     }
 
-    results-page__grid > * {
+    .results-page__grid > * {
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
@@ -323,8 +325,8 @@
 
     .results-search-bar__input-wrapper {
         width: auto;
-        flex: 1;              /* тянется, забирая оставшееся место */
-        min-width: 0;
+        flex: 1 1 auto;
+        min-width: 200px;
     }
 
     .results-search-bar__dropdown-wrapper {
@@ -336,5 +338,72 @@
         width: 150px;         /* чуть уже 196px */
         flex-shrink: 0;
         padding: 0 12px;
+    }
+}
+
+@media (max-width: 590px) {
+    .results-search-bar__wrapper {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        gap: 8px 10px;
+        padding: 0 16px;
+    }
+
+    .results-search-bar__input-wrapper {
+        grid-column: 1;
+        grid-row: 1;
+        width: auto;
+        height: 27px;
+    }
+
+    .results-search-bar__input {
+        text-align: left;
+        font-size: 12px;
+        padding: 0 12px;
+    }
+
+    .results-search-bar__dropdown-wrapper {
+        grid-column: 2;
+        grid-row: 1;
+        width: auto;
+        min-width: 90px;
+        height: 27px;
+    }
+
+    .results-search-bar__dropdown-trigger {
+        font-size: 11px;
+        padding: 0 10px;
+        gap: 4px;
+    }
+
+    /* Кнопка — вторая строка, ровно под инпутом */
+    .results-search-bar__button {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
+        height: 27px;
+        font-size: 12px;
+        padding: 0 10px;
+    }
+
+    .results-search-bar__dropdown-menu {
+        left: auto;
+        right: 0;
+        width: 220px;
+        top: 31px;
+        padding: 0 16px;
+    }
+
+    .results-search-bar__dropdown-menu.open {
+        padding: 10px 16px 14px 16px;
+    }
+
+    .results-search-bar__dropdown-text {
+        font-size: 13px;
+    }
+
+    .results-search-bar__dropdown-checkbox {
+        width: 16px;
+        height: 16px;
     }
 }

@@ -320,28 +320,118 @@
 
 @media (max-width: 700px) {
     .search-bar__wrapper {
-        flex-direction: column;
-        align-items: stretch;
+        flex-wrap: wrap;         /* было flex-direction: column */
+        align-items: center;
         gap: 12px;
     }
 
     .search-bar__input-wrapper {
-        min-width: 0;   /* иначе min-width: 307px тоже может конфликтовать */
-        width: 100%;
+        flex: 1 1 auto;
+        min-width: 0;
     }
 
     .search-bar__dropdown-group {
-        width: 100%;   /* здесь уже корректно — это единственный элемент в своей "строке" */
+        width: auto;
         flex-shrink: 0;
     }
 
     .search-bar__dropdown-trigger {
-        width: 100%;   /* было 200px — тоже фиксированное значение, тянущее layout */
+        width: auto;
+        min-width: 130px;
     }
 
     .search-bar__button {
+        flex: 1 1 100%;           /* заставляет кнопку упасть на новую строку */
         width: 100%;
         min-width: 0;
-        white-space: normal;   /* на случай ещё более узких экранов */
+        white-space: normal;
+    }
+}
+
+@media (max-width: 590px) {
+    .search-bar__wrapper {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        gap: 8px 10px;
+    }
+
+    .search-bar__input-wrapper {
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
+        width: auto;
+    }
+
+    .search-bar__dropdown-group {
+        grid-column: 2;
+        grid-row: 1;
+        width: auto;
+        min-width: 90px;
+    }
+
+    .search-bar__input-container,
+    .search-bar__dropdown-trigger {
+        height: 27px;
+    }
+
+    .search-bar__input {
+        font-size: 12px;
+        padding: 0 8px 0 30px;
+    }
+
+    .search-bar__icon {
+        left: 8px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .search-bar__dropdown-trigger {
+        font-size: 11px;
+        padding: 0 10px;
+        gap: 4px;
+    }
+
+    .search-bar__arrow {
+        width: 8px;
+        height: 8px;
+        margin-top: -2px;
+    }
+
+    /* Кнопка — вторая строка, ровно под инпутом */
+    .search-bar__button {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
+        height: 27px;
+        min-width: 0;
+        font-size: 12px;
+        padding: 0 10px;
+        white-space: normal;
+    }
+
+    /* --- Меню теперь шире узкого триггера, привязано к правому краю --- */
+    .search-bar__dropdown-menu {
+        left: auto;
+        right: 0;
+        width: 220px;
+        top: 31px;
+        padding: 0 16px;
+    }
+
+    .search-bar__dropdown-menu.open {
+        padding: 10px 16px 14px 16px;
+    }
+
+    .search-bar__dropdown-item {
+        gap: 8px;
+    }
+
+    .search-bar__dropdown-text {
+        font-size: 13px;
+    }
+
+    .search-bar__dropdown-checkbox {
+        width: 16px;
+        height: 16px;
     }
 }

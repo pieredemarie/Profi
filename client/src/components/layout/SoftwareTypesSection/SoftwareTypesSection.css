@@ -67,7 +67,7 @@
 
     .software-types-section__container {
         max-width: 990px;
-        padding: 0 135px;
+        padding: 0 24px;
     }
 
     .software-types-section__title {
@@ -98,5 +98,41 @@
         align-items: center;
         justify-content: center;
         line-height: 1.2;
+    }
+}
+
+@media (max-width: 590px) {
+    .software-types-section {
+        padding: 32px 0;
+    }
+
+    .software-types-section__container {
+        padding: 0 16px;
+    }
+
+    .software-types-section__title {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .software-types-section__subtitle {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .software-types-section__grid {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 16px;
+        column-gap: 12px;
+    }
+
+    .software-types-section__btn {
+        height: auto;
+        min-height: 44px;
+        font-size: 13px;
+        padding: 8px 10px;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        text-align: center;
     }
 }
