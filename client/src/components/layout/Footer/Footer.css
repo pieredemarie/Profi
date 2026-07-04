@@ -68,3 +68,40 @@
 .underlined {
     text-decoration: underline;
 }
+
+@media (max-width: 990px) {
+    .footer__contacts {
+        height: auto;
+        padding: 20px 0 30px 0;
+    }
+
+    .footer__container {
+        max-width: 990px;
+        padding: 0 15px;
+    }
+
+    .footer__title {
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .footer__info-row {
+        gap: 57px;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .footer__info-item {
+        font-size: 12px;
+        gap: 8px;
+    }
+
+    .footer__info-item svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .footer-map {
+        height: 300px;
+    }
+}

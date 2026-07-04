@@ -55,3 +55,29 @@
     text-decoration: none;
     font-family: 'Mulish', sans-serif;
 }
+
+
+/*стили под планшеты*/
+@media (max-width: 990px) {
+    .header {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .header__container {
+        max-width: 990px;
+        padding: 0 15px;
+    }
+
+    .header__button {
+        left: 15px;
+        width: 160px;
+        height: 44px;
+        font-size: 18px;
+    }
+
+    .header__button svg {
+        width: 20px;
+        height: 20px;
+    }
+}

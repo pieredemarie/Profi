@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './FooterMap.css';
 
-
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -23,7 +22,6 @@ interface FooterMapProps {
 }
 
 export const FooterMap: React.FC<FooterMapProps> = ({ center, zoom = 16, address }) => {
-
     const customIcon = L.divIcon({
         className: 'custom-marker-wrapper',
         html: `
@@ -37,8 +35,8 @@ export const FooterMap: React.FC<FooterMapProps> = ({ center, zoom = 16, address
                 <div class="custom-marker__label">${address}</div>
             </div>
         `,
-        iconSize: [200, 60], // Размер всей иконки
-        iconAnchor: [100, 30], // Центр иконки
+        iconSize: [200, 60],
+        iconAnchor: [100, 30],
         popupAnchor: [0, -30],
     });
 
@@ -48,12 +46,12 @@ export const FooterMap: React.FC<FooterMapProps> = ({ center, zoom = 16, address
             zoom={zoom}
             scrollWheelZoom={true}
             className="footer-map"
+            attributionControl={false}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-
 
             <Marker position={center} icon={customIcon}>
                 <Popup>{address}</Popup>
