@@ -85,6 +85,7 @@ class ReplacementSearchController extends Controller
         ]);
 
         $foreignProductName = $this->normalizeQuery($validated['foreign_product_name']);
+        $softwareClasses = $this->normalizeSoftwareClasses($request->query('software_classes', []));
 
         if ($foreignProductName === '') {
             return response()->json([]);
@@ -106,6 +107,16 @@ class ReplacementSearchController extends Controller
                 },
             ])
             ->where('foreign_product_name', $foreignProductName)
+            ->when($softwareClasses !== [], function ($query) use ($softwareClasses): void {
+                $query->where(function ($query) use ($softwareClasses): void {
+                    foreach ($softwareClasses as $softwareClass) {
+                        $query->orWhereRaw(
+                            'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
+                            ['%|'.$this->escapeLike($softwareClass).'|%']
+                        );
+                    }
+                });
+            })
             ->whereHas('partnerReplacements')
             ->orderBy('registry_number')
             ->get();
@@ -130,4 +141,24 @@ class ReplacementSearchController extends Controller
     {
         return trim(preg_replace('/\s+/u', ' ', $query));
     }
+
+
+    private function normalizeSoftwareClasses(mixed $softwareClasses): array
+    {
+        if (is_string($softwareClasses)) {
+            $softwareClasses = explode(',', $softwareClasses);
+        }
+
+        if (! is_array($softwareClasses)) {
+            return [];
+        }
+
+        return collect($softwareClasses)
+            ->map(fn (mixed $softwareClass) => $this->normalizeQuery((string) $softwareClass))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
 }
