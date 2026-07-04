@@ -120,7 +120,9 @@
 
 @media (max-width: 995px) {
     .card-item {
-        width: 720px;
+        width: 100%;
+        max-width: 720px;
+        box-sizing: border-box;
         height: auto;
         min-height: 264px;
         padding: 32px 40px;
@@ -137,7 +139,6 @@
 
 
     .card-item__content {
-
         padding-right: 180px;
     }
 
@@ -155,12 +156,15 @@
     }
 
     .card-item__button {
-        width: 376px;
-        height: 54px;
+        width: 100%;
+        max-width: 376px;
+        white-space: normal;
+        box-sizing: border-box ;
+        min-height: 54px !important;
+        height: auto;
         font-size: 24px;
         font-weight: 700;
         margin-top: 12px;
-        padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -185,3 +189,30 @@
         transform: scale(1.2);
     }
 }
+
+@media (max-width: 700px) {
+    .card-item {
+        padding: 24px 28px;
+    }
+
+    .card-item__content {
+        padding-right: 130px; /* пропорционально уменьшаем гуттер */
+    }
+
+    .card-item__corner {
+        width: 120px;
+        height: 130px;
+    }
+
+    .card-item__images-wrapper:has(.card-item__image:nth-child(2)) .card-item__image:nth-child(1) {
+        width: 34px;
+        height: 64px;
+    }
+
+    .card-item__images-wrapper:has(.card-item__image:nth-child(2)) .card-item__image:nth-child(2) {
+        width: 50px;
+        height: 50px;
+        transform: scale(1.1);
+    }
+}
+

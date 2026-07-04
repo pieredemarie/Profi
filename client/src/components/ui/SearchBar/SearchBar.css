@@ -227,9 +227,9 @@
     }
 
     .search-bar__wrapper {
-        gap: 30px;
+        gap: 10px;
         max-width: 100%;
-        padding: 0 135px;
+        padding: 0 24px;
         align-items: center;
     }
 
@@ -239,9 +239,9 @@
     }
 
     .search-bar__dropdown-group {
-        width: 100%;
-        height: 40px;
+        width: auto;
         flex-shrink: 0;
+        height: 40px;
     }
 
     .search-bar__input {
@@ -315,5 +315,33 @@
         padding: 10px 36px;
         font-size: 16px;
         flex-shrink: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .search-bar__wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .search-bar__input-wrapper {
+        min-width: 0;   /* иначе min-width: 307px тоже может конфликтовать */
+        width: 100%;
+    }
+
+    .search-bar__dropdown-group {
+        width: 100%;   /* здесь уже корректно — это единственный элемент в своей "строке" */
+        flex-shrink: 0;
+    }
+
+    .search-bar__dropdown-trigger {
+        width: 100%;   /* было 200px — тоже фиксированное значение, тянущее layout */
+    }
+
+    .search-bar__button {
+        width: 100%;
+        min-width: 0;
+        white-space: normal;   /* на случай ещё более узких экранов */
     }
 }

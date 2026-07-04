@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 30px;
     width: 100%;
     max-width: 950px;
     margin: 0 auto;
@@ -37,6 +37,7 @@
     position: relative;
     width: 299px;
     height: 60px;
+    z-index: 50;
 }
 
 .results-search-bar__dropdown-trigger {
@@ -81,59 +82,78 @@
     top: 60px;
     left: 0;
     width: 100%;
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
+    /* ИСПРАВЛЕНО: Цвет фона в тон триггера, как на макете image_842dc1.png */
+    background-color: #F4F4F4;
+    border: 1px solid #717171;
     border-top: none;
     border-bottom-left-radius: 32px;
     border-bottom-right-radius: 32px;
-    padding: 0 32px;
+    padding: 0 24px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     max-height: 0;
     opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.3s ease;
-}
-.results-search-bar__dropdown-menu.open {
-    max-height: 400px;
-    opacity: 1;
-    padding: 12px 32px 20px 32px;
-    overflow-y: auto;
+    overflow: hidden; /* Скрыто в закрытом состоянии */
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    z-index: 51;
+    box-sizing: border-box;
 }
 
+.results-search-bar__dropdown-menu.open {
+    /* ИСПРАВЛЕНО: Убираем фиксированную высоту и скроллбар, чтобы дать тексту простор */
+    max-height: 500px;
+    opacity: 1;
+    padding: 20px 24px 28px 24px;
+}
+
+/* --- СТРОКА С ТЕКСТОМ И ЧЕКБОКСОМ --- */
 .results-search-bar__dropdown-item {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+    align-items: center; /* Центрируем чекбокс и текст по вертикальной оси */
+    justify-content: space-between; /* Текст уходит влево, чекбокс строго вправо */
     cursor: pointer;
-    transition: background 0.2s ease;
-    font-size: 24px;
-    font-weight: 500;
-    font-family: 'Mulish', sans-serif;
+    padding: 4px 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.results-search-bar__dropdown-checkbox {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    cursor: pointer;
-}
-
+/* --- ТЕКСТ (СЛЕВА) --- */
 .results-search-bar__dropdown-text {
-    font-size: 24px;
+    /* ИСПРАВЛЕНО: Шрифт крупнее, как на образце */
+    font-size: 20px;
     font-weight: 500;
     font-family: 'Mulish', sans-serif;
     text-align: left;
-    display: block;
-    width: 100%;
-    line-height: 1.3;
+    color: #111111;
+    line-height: 1.2;
+    flex: 1;
+    order: 1; /* Железно первый (слева) */
 }
 
-/* --- КНОПКА: теперь кликабельная, без disabled --- */
+/* --- ЧЕКБОКС (СПРАВА) --- */
+.results-search-bar__dropdown-checkbox {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0; /* Чекбокс больше не сжимается */
+    cursor: pointer;
+    margin: 0 0 0 12px;
+    order: 2; /* Железно второй (справа) */
+}
+
+/* --- ТЕКСТ (ТЕПЕРЬ СПРАВА) --- */
+.results-search-bar__dropdown-text {
+    /* ИСПРАВЛЕНО: Уменьшили шрифт до 16px, чтобы всё помещалось без дурацких переносов */
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Mulish', sans-serif;
+    text-align: left;
+    line-height: 1.3;
+    word-break: normal;
+    order: 2; /* Встает сразу после чекбокса */
+}
+
 .results-search-bar__button {
     width: 284px;
     height: 60px;
@@ -145,9 +165,176 @@
     font-family: 'Mulish', sans-serif;
     font-size: 24px;
     font-weight: 700;
-    cursor: pointer; /* ✅ Кликабельная */
+    cursor: pointer;
     transition: background 0.2s ease;
 }
 .results-search-bar__button:hover {
     background-color: #155a8a;
+}
+
+@media (max-width: 995px) {
+    .results-search-bar__wrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        max-width: 100%;
+        padding: 0 135px;
+    }
+
+    .results-search-bar__input-wrapper {
+        width: 307px;
+        height: 40px;
+        background-color: #F4F4F4;
+        border: 1px solid #717171;
+        border-radius: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .results-search-bar__input {
+        width: 100%;
+        height: 100%;
+        padding: 0 24px;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        color: #000000;
+    }
+
+    .results-search-bar__dropdown-wrapper {
+        width: 157px;
+        height: 40px;
+    }
+
+    .results-search-bar__dropdown-trigger {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        background-color: #F4F4F4;
+        border: 1px solid #717171;
+        border-radius: 32px;
+        color: #111111;
+        padding: 0 16px; /* Уменьшили паддинг, чтобы влезло слово «Тип ПО» и стрелочка */
+        box-sizing: border-box;
+    }
+
+    .results-search-bar__dropdown-trigger.open {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-color: #717171;
+    }
+
+    .results-search-bar__arrow {
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid #000000;
+        border-bottom: 2px solid #000000;
+        flex-shrink: 0;
+    }
+
+    .results-search-bar__dropdown-menu {
+        top: 40px;
+        border-top: none;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        box-sizing: border-box;
+        z-index: 51;
+        padding: 0 12px; /* Чуть уменьшаем отступы по краям для узкого экрана */
+    }
+
+    .results-search-bar__dropdown-menu.open {
+        max-height: 500px; /* Увеличили запас по высоте, чтобы убрать скролл */
+        opacity: 1;
+        padding: 12px 12px 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: visible; /* Убираем скроллбар, ломающий верстку */
+    }
+
+    /* ИСПРАВЛЕНО: Четкое распределение «текст слева / чекбокс справа» для мобилок */
+    .results-search-bar__dropdown-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 4px 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* ИСПРАВЛЕНО: Уменьшаем шрифт текста в меню до 13px, чтобы он помещался в ширину 157px */
+    .results-search-bar__dropdown-text {
+        font-size: 13px;
+        font-weight: 500;
+        color: #111111;
+        line-height: 1.2;
+        text-align: left;
+        flex: 1;
+        order: 1; /* Текст гарантированно слева */
+    }
+
+    /* ИСПРАВЛЕНО: Фиксируем мобильный чекбокс */
+    .results-search-bar__dropdown-checkbox {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        margin: 0;
+        order: 2; /* Чекбокс гарантированно справа */
+    }
+
+    .results-search-bar__button {
+        width: 196px;
+        height: 40px;
+        background-color: #216FA3;
+        border-radius: 32px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 24px;
+    }
+
+    results-page__grid > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .results-page__form-wrapper {
+        margin-top: 60px;
+        width: 100%;
+    }
+}
+@media (max-width: 800px) {
+    .results-search-bar__wrapper {
+        gap: 16px;
+        padding: 0 24px;
+    }
+
+    .results-search-bar__input-wrapper {
+        width: auto;
+        flex: 1;              /* тянется, забирая оставшееся место */
+        min-width: 0;
+    }
+
+    .results-search-bar__dropdown-wrapper {
+        width: 140px;         /* чуть уже фиксированной 157px */
+        flex-shrink: 0;
+    }
+
+    .results-search-bar__button {
+        width: 150px;         /* чуть уже 196px */
+        flex-shrink: 0;
+        padding: 0 12px;
+    }
 }

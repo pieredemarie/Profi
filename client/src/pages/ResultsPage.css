@@ -128,3 +128,35 @@
     border: none;
     font-weight: 700;
 }
+
+@media (max-width: 995px) {
+    .results-page__main {
+        max-width: 100%;
+        padding: 40px 135px 60px; /* Боковые поля основного контента строго 135px */
+        box-sizing: border-box;
+    }
+
+    .results-page__group {
+        margin-bottom: 40px;
+    }
+
+    .results-page__group-title {
+        font-size: 28px; /* Оптимизируем размер названия группы под планшет */
+        margin-bottom: 20px;
+        text-align: left; /* Как на макете image_f1f25.png */
+    }
+
+    /* ИСПРАВЛЕНО: Перестраиваем сетку в одну ровную колонку */
+    .results-page__grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Центрируем карточки в потоке */
+        gap: 22px; /* Расстояние между карточками по вертикали */
+        width: 100%;
+    }
+
+    .results-page__form-wrapper {
+        margin-top: 50px;
+        width: 100%;
+    }
+}
