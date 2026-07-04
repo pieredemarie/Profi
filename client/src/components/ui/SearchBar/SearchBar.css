@@ -250,7 +250,7 @@
         padding: 0 16px 0 40px;
         font-size: 16px;
         box-sizing: border-box;
-        background-color: transparent;
+        background-color: #ffffff;
         border: none;
     }
 
@@ -267,7 +267,8 @@
         left: 12px;
         width: 18px;
         height: 18px;
-        flex-shrink: 0  ;
+        flex-shrink: 0;
+        pointer-events: none;
     }
 
     .search-bar__suggestion-item {
