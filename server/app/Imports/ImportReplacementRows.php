@@ -24,17 +24,11 @@ class ImportReplacementRows implements ToModel, WithBatchInserts, WithChunkReadi
         $foreignProductName = $this->clean($row[0] ?? '');
         $domesticProductName = $this->clean($row[1] ?? '');
         $registryNumber = $this->cleanRegistryNumber($row[2] ?? '');
+        $softwareClass = $this->clean($row[3] ?? '');
 
         if ($foreignProductName === '' || $domesticProductName === '' || $registryNumber === '') {
             return null;
         }
-
-        $softwareClass = collect(array_slice($row, 3))
-            ->map(fn ($value) => $this->clean($value))
-            ->filter()
-            ->unique()
-            ->values()
-            ->implode(' | ');
 
         return new ImportReplacementStagingTable([
             'foreign_product_name' => $foreignProductName,
