@@ -9,7 +9,7 @@ class Application extends Model
     protected $fillable = [
 
         'foreign_product_name',
-        'partner_replacement_list',
+        'partner_replacement',
         'full_name',
         'phone_number',
 

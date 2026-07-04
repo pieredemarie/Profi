@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutocompleteController;
 use App\Http\Controllers\SoftwareClassDisplayController;
 use App\Http\Controllers\ReplacementSearchController;
+use App\Http\Controllers\ApplicationCreateController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -21,3 +22,5 @@ Route::get(
     '/import_replacements/foreign-product/partner-replacements',
     [ReplacementSearchController::class, 'partnerReplacementsByForeignProductName']
 );
+
+Route::post('/applications', [ApplicationCreateController::class, 'store']);
