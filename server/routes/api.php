@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutocompleteController;
 use App\Http\Controllers\SoftwareClassDisplayController;
-use App\Http\Controllers\ReplacementsBySoftwareClass;
+use App\Http\Controllers\ReplacementSearchController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -15,5 +15,9 @@ Route::get('/import_replacements/software-classes', [SoftwareClassDisplayControl
 
 Route::get(
     '/import_replacements/software-classes/partner-replacements',
-    [ReplacementsBySoftwareClass::class, 'withPartnerReplacementsBySoftwareClass']
+    [ReplacementSearchController::class, 'withPartnerReplacementsBySoftwareClass']
+);
+Route::get(
+    '/import_replacements/foreign-product/partner-replacements',
+    [ReplacementSearchController::class, 'partnerReplacementsByForeignProductName']
 );
