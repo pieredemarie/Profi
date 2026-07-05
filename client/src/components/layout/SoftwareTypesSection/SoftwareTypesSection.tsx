@@ -1,14 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SoftwareTypesSection.css';
 
-
-const sendTypeRequest = async (typeName: string) => {
-    console.log(`Отправляю запрос на сервер для типа: "${typeName}"`);
-    // тут далее будет fetch
-
-};
-
 export const SoftwareTypesSection: React.FC = () => {
+    const navigate = useNavigate();
+
     const types = [
         'Антивирусное ПО',
         'Корпоративные карты',
@@ -17,10 +13,13 @@ export const SoftwareTypesSection: React.FC = () => {
         'IDM системы'
     ];
 
-    const handleTypeClick = async (type: string) => {
-        // Вызываем заглушку
-        await sendTypeRequest(type);
-        // В будущем здесь можно будет добавить toast-уведомление или редирект
+    const handleTypeClick = (type: string) => {
+        navigate('/results', {
+            state: {
+                query: '',
+                softwareClasses: [type],
+            }
+        });
     };
 
     return (

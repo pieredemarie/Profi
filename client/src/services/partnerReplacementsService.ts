@@ -79,3 +79,37 @@ export const fetchSearchResults = async (
         replaces: replacesMap.get(r.software_class)?.get(r.partner_product_name) ?? [],
     }));
 };
+
+export const fetchSearchResultsByClasses = async (
+    softwareClasses: string[],
+    signal?: AbortSignal
+): Promise<EnrichedResult[]> => {
+    const classData = await Promise.all(
+        softwareClasses.map(cls => fetchReplacementsByClass(cls, signal))
+    );
+
+    const results: EnrichedResult[] = [];
+    softwareClasses.forEach((cls, idx) => {
+        const byDomestic = new Map<string, string[]>();
+        classData[idx].forEach(item => {
+            const list = byDomestic.get(item.domestic_product_name) ?? [];
+            list.push(item.foreign_product_name);
+            byDomestic.set(item.domestic_product_name, list);
+        });
+
+        byDomestic.forEach((foreignNames, domesticName) => {
+            const registryNumber = classData[idx].find(
+                item => item.domestic_product_name === domesticName
+            )?.registry_number ?? '';
+
+            results.push({
+                softwareClass: cls,
+                partnerProductName: domesticName,
+                registryNumber,
+                replaces: foreignNames,
+            });
+        });
+    });
+
+    return results;
+};

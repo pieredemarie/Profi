@@ -20,11 +20,9 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
 
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    // Синхронизируем инпут, если query на странице изменился снаружи
     useEffect(() => {
         setQuery(initialQuery);
     }, [initialQuery]);
-
 
     useEffect(() => {
         const controller = new AbortController();
@@ -38,13 +36,11 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
         return () => controller.abort();
     }, []);
 
-    // onTypeChange вызывается после реального обновления стейта
     useEffect(() => {
         onTypeChange?.(selectedTypes);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedTypes]);
 
-    // Закрытие дропдауна по клику вне компонента
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -64,7 +60,7 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
     };
 
     const handleSearch = () => {
-        if (query.trim()) {
+        if (query.trim() || selectedTypes.length > 0) {
             onSearch?.(query, selectedTypes);
         }
     };

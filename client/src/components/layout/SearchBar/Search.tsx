@@ -20,7 +20,7 @@ export const Search: React.FC = () => {
     };
 
     const handleSearch = (searchQuery: string, softwareClasses: string[] = []) => {
-        if (!searchQuery.trim()) return;
+        if (!searchQuery.trim() && softwareClasses.length === 0) return;
 
         navigate('/results', {
             state: {

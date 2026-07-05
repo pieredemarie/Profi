@@ -5,7 +5,7 @@ import { ConsultationForm } from '../components/ui/ConsultationForm/Consultation
 import { ResultsSearchBar } from '../components/ui/ResultsSearchBar/ResultsSearchBar';
 import { Header } from '../components/layout/Header/Header';
 import { Footer } from '../components/layout/Footer/Footer';
-import { fetchSearchResults } from '../services/partnerReplacementsService';
+import {fetchSearchResults, fetchSearchResultsByClasses} from '../services/partnerReplacementsService';
 import type { EnrichedResult } from '../services/partnerReplacementsService';
 import './ResultsPage.css';
 
@@ -18,18 +18,26 @@ export const ResultsPage = () => {
     const initialQuery = location.state?.query || '';
     const initialClasses = location.state?.softwareClasses || [];
 
-    const [query, setQuery] = useState(initialQuery);
+    const [query, setQuery] = useState(
+        initialQuery.trim() ? initialQuery : initialClasses.join(', ')
+    );
     const [results, setResults] = useState<EnrichedResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<SelectedProduct | null>(null);
 
     const runSearch = useCallback(async (searchQuery: string, softwareClasses: string[] = []) => {
-        if (!searchQuery.trim()) return;
+        const hasQuery = searchQuery.trim().length > 0;
+        const hasClasses = softwareClasses.length > 0;
+
+        if (!hasQuery && !hasClasses) return; // нечего искать
+
         setIsLoading(true);
         setError(null);
         try {
-            const data = await fetchSearchResults(searchQuery, softwareClasses);
+            const data = hasQuery
+                ? await fetchSearchResults(searchQuery, softwareClasses)
+                : await fetchSearchResultsByClasses(softwareClasses);
             setResults(data);
         } catch (err) {
             console.error(err);
@@ -45,7 +53,7 @@ export const ResultsPage = () => {
     }, []);
 
     const handleSearch = (newQuery: string, softwareClasses: string[] = []) => {
-        setQuery(newQuery);
+        setQuery(newQuery.trim() ? newQuery : softwareClasses.join(', '));
         setSelectedProduct(null);
         runSearch(newQuery, softwareClasses);
     };
