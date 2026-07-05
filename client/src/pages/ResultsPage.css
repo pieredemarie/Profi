@@ -1,4 +1,4 @@
-/* Общий контейнер */
+
 .results-page {
     width: 100%;
     display: flex;
@@ -8,9 +8,6 @@
     padding: 0;
 }
 
-/* ========================================================== */
-/* 1. СИНИЙ БЛОК (1920x384, фон #3498DB) */
-/* ========================================================== */
 .results-page__blue-header {
     width: 100%;
     height: 384px;
@@ -38,24 +35,21 @@
     color: #ffffff;
     margin: 0;
     width: 100%;
-    white-space: normal;   /* базовое поведение, <br /> сам создаёт перенос */
+    white-space: normal;
     line-height: 1.2;
 }
 
 .results-page__main-title span {
-    white-space: nowrap;   /* название решения не должно ломаться по словам */
+    white-space: nowrap;
     display: inline-block;
 }
 
-/* Подчеркнутый текст (название программы) */
+
 .results-page__main-title--underline {
     text-decoration: underline;
     text-underline-offset: 4px;
 }
 
-/* ========================================================== */
-/* 2. ОСНОВНОЙ КОНТЕНТ (карточки) */
-/* ========================================================== */
 .results-page__main {
     max-width: 1200px;
     width: 100%;
@@ -87,9 +81,7 @@
     justify-content: center;
 }
 
-/* ========================================================== */
-/* 3. СТРОКА ПОИСКА НА СТРАНИЦЕ РЕЗУЛЬТАТОВ (неактивная) */
-/* ========================================================== */
+
 .results-page__search-wrapper {
     width: 100%;
     display: flex;
@@ -109,7 +101,7 @@
     font-size: 18px;
     color: #111111;
     opacity: 0.7;
-    pointer-events: none; /* Делает элементы неактивными */
+    pointer-events: none;
     user-select: none;
 }
 
@@ -154,7 +146,7 @@
 @media (max-width: 995px) {
     .results-page__main {
         max-width: 100%;
-        padding: 40px 24px 60px;   /* было 135px — тот же баг, что и везде */
+        padding: 40px 24px 60px;
         box-sizing: border-box;
     }
 
@@ -165,7 +157,7 @@
 
     .results-page__blue-container {
         width: 100%;
-        max-width: 100%;   /* было width: 1056px */
+        max-width: 100%;
         height: auto;
     }
 
@@ -178,17 +170,17 @@
     }
 
     .results-page__group-title {
-        font-size: 28px; /* Оптимизируем размер названия группы под планшет */
+        font-size: 28px;
         margin-bottom: 20px;
-        text-align: left; /* Как на макете image_f1f25.png */
+        text-align: left;
     }
 
-    /* ИСПРАВЛЕНО: Перестраиваем сетку в одну ровную колонку */
+
     .results-page__grid {
         display: flex;
         flex-direction: column;
-        align-items: center; /* Центрируем карточки в потоке */
-        gap: 22px; /* Расстояние между карточками по вертикали */
+        align-items: center;
+        gap: 22px;
         width: 100%;
     }
 

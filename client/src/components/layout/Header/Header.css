@@ -15,9 +15,7 @@
     padding: 0 20px;
     display: flex;
     align-items: center;
-    /* Центрируем логотип по умолчанию */
     justify-content: center;
-    /* Делаем контейнер относительным для абсолютного позиционирования кнопки */
     position: relative;
     box-sizing: border-box;
 }
@@ -57,7 +55,6 @@
 }
 
 
-/*стили под планшеты*/
 @media (max-width: 990px) {
     .header {
         padding-top: 15px;

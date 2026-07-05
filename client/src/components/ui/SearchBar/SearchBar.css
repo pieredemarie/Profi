@@ -320,7 +320,7 @@
 
 @media (max-width: 700px) {
     .search-bar__wrapper {
-        flex-wrap: wrap;         /* было flex-direction: column */
+        flex-wrap: wrap;
         align-items: center;
         gap: 12px;
     }
@@ -341,7 +341,7 @@
     }
 
     .search-bar__button {
-        flex: 1 1 100%;           /* заставляет кнопку упасть на новую строку */
+        flex: 1 1 100%;
         width: 100%;
         min-width: 0;
         white-space: normal;
@@ -397,7 +397,7 @@
         margin-top: -2px;
     }
 
-    /* Кнопка — вторая строка, ровно под инпутом */
+
     .search-bar__button {
         grid-column: 1;
         grid-row: 2;
@@ -409,7 +409,7 @@
         white-space: normal;
     }
 
-    /* --- Меню теперь шире узкого триггера, привязано к правому краю --- */
+
     .search-bar__dropdown-menu {
         left: auto;
         right: 0;

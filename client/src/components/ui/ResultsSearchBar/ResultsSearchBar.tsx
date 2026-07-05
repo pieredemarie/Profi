@@ -21,12 +21,11 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     // Синхронизируем инпут, если query на странице изменился снаружи
-    // (например, после клика по тегу на главной и повторного захода)
     useEffect(() => {
         setQuery(initialQuery);
     }, [initialQuery]);
 
-    // Реальный список типов ПО вместо хардкода
+
     useEffect(() => {
         const controller = new AbortController();
         fetchSoftwareClasses(controller.signal)

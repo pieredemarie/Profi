@@ -8,7 +8,7 @@ interface SuccessModalProps {
 }
 
 export const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) => {
-    // Вместо удаления из DOM, мы управляем видимостью через CSS-класс
+
     return (
         <div
             className={`success-modal__overlay ${isOpen ? 'success-modal--open' : ''}`}
@@ -16,7 +16,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) =
         >
             <div className="success-modal__content" onClick={(e) => e.stopPropagation()}>
 
-                {/* Кнопка-крестик для закрытия */}
+
                 <button className="success-modal__close" onClick={onClose} aria-label="Закрыть">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path

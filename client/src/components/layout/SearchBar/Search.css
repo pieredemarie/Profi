@@ -1,8 +1,7 @@
-/* src/components/sections/Search/Search.css */
 
 .search {
     width: 100%;
-    height: 612px; /* Высота увеличилась из-за тегов */
+    height: 612px;
     background-color: #F6F6F6;
     display: flex;
     justify-content: center;
@@ -34,15 +33,15 @@
     font-size: 24px;
     font-weight: 500;
     color: #000000;
-    margin-bottom: 100px; /* Уменьшили отступ, чтобы поместились теги */
+    margin-bottom: 100px;
 }
 
 .search__search-wrapper {
     width: 100%;
-    margin-bottom: 40px; /* Отступ до тегов */
+    margin-bottom: 40px;
 }
 
-/* --- Стили для тегов "Часто ищут..." --- */
+
 .search__tags-container {
     width: 100%;
     max-width: 1208px;

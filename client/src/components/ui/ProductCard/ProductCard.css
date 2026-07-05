@@ -1,4 +1,4 @@
-/* Основная карточка: 384x278 */
+
 .product-card {
     width: 582px;
     height: 278px;
@@ -12,7 +12,7 @@
     overflow: hidden;
 }
 
-/* Синяя полоска слева (10px шириной) */
+
 .product-card__left-stripe {
     width: 10px;
     background-color: #3498db;
@@ -49,7 +49,7 @@
     flex-shrink: 0;
 }
 
-/* Заголовок: 24px жирный */
+
 .product-card__title {
     font-family: 'Mulish', sans-serif;
     font-size: 24px;
@@ -59,7 +59,7 @@
     line-height: 1.2;
 }
 
-/* Подзаголовок (реестр): 14px, 400 weight */
+
 .product-card__registry {
     font-family: 'Mulish', sans-serif;
     font-size: 14px;
@@ -68,12 +68,12 @@
     margin: 4px 0 0 0;
 }
 
-/* Блок "Заменяет:" */
+
 .product-card__replaces-wrapper {
     margin-top: 8px;
 }
 
-/* Текст "Заменяет:" 14px, черный #000000 */
+
 .product-card__replaces-label {
     font-family: 'Mulish', sans-serif;
     font-size: 14px;
@@ -82,7 +82,7 @@
     margin: 0 0 4px 0;
 }
 
-/* Список замен: 12px, серый #B0B0B0 */
+
 .product-card__replaces-list {
     font-family: 'Mulish', sans-serif;
     font-size: 14px;
@@ -92,11 +92,11 @@
     line-height: 1.4;
 }
 
-/* Кнопка: 220x36, радиус 12 */
+
 .product-card__button {
     width: 244px;
     height: 36px;
-    margin-top: auto; /* Прижимает кнопку к низу карточки */
+    margin-top: auto;
     background-color: #3498db;
     color: #ffffff;
     border: none;
@@ -106,7 +106,7 @@
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    align-self: flex-start; /* Кнопка прижата к левому краю (как на макете) */
+    align-self: flex-start;
 }
 
 .product-card__button:hover {
