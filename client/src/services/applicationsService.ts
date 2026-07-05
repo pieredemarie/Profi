@@ -21,10 +21,19 @@ export const submitApplication = async (payload: ApplicationPayload) => {
         const response = await apiClient.post('/applications', payload);
         return { success: true as const, data: response.data };
     } catch (err) {
-        const error = err as AxiosError<ApplicationValidationError>;
+        const error = err as AxiosError<any>;
+
         if (error.response?.status === 422) {
-            return { success: false as const, error: error.response.data.error };
+            return {
+                success: false as const,
+                error: {
+                    code: 'VALIDATION_ERROR',
+                    message: error.response.data.message ?? 'Проверьте данные формы',
+                    fields: error.response.data.errors ?? {},
+                },
+            };
         }
+
         throw err;
     }
 };

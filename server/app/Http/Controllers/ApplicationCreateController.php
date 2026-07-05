@@ -12,6 +12,11 @@ class ApplicationCreateController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
+        $data = $request->all();
+
+        if (isset($data['phone_number'])) {
+            $data['phone_number'] = $this->normalizePhone($data['phone_number']);
+        }
         $validator = Validator::make($request->all(), [
             'foreign_product_name' => ['required', 'string', 'max:500'],
 
@@ -105,5 +110,19 @@ class ApplicationCreateController extends Controller
         $value = $this->normalizeText($value);
 
         return $value === '' ? null : $value;
+    }
+    private function normalizePhone(mixed $value): string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $value);
+
+        if (strlen($digits) === 11 && str_starts_with($digits, '8')) {
+            $digits = '7'.substr($digits, 1);
+        }
+
+        if (strlen($digits) === 11 && str_starts_with($digits, '7')) {
+            return '+'.$digits;
+        }
+
+        return (string) $value;
     }
 }

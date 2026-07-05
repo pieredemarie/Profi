@@ -15,9 +15,4 @@ class Application extends Model
 
     ];
 
-    protected $casts = [
-
-        'partner_replacement_list' => 'array',
-
-    ];
 }
