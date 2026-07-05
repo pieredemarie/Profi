@@ -12,13 +12,6 @@ export const Search: React.FC = () => {
         "VMware", "Cisco IOS Intrusion",
     ];
 
-    const handleTagClick = (tag: string) => {
-        const input = document.querySelector('.search-bar__input') as HTMLInputElement;
-        if (input) {
-            input.value = tag;
-        }
-    };
-
     const handleSearch = (searchQuery: string, softwareClasses: string[] = []) => {
         if (!searchQuery.trim() && softwareClasses.length === 0) return;
 
@@ -28,6 +21,10 @@ export const Search: React.FC = () => {
                 softwareClasses,
             }
         });
+    };
+
+    const handleTagClick = (tag: string) => {
+        handleSearch(tag);
     };
 
     return (
