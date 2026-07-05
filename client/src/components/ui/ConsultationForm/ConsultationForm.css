@@ -114,21 +114,21 @@
 }
 
 @media (max-width: 995px) {
-    /* Общая обертка формы на странице */
+
     .consultation-form-wrapper {
-        padding: 40px 24px; /* Боковой отступ по сетке 135px */
+        padding: 40px 24px;
         width: 100%;
         box-sizing: border-box;
     }
 
-    /* Главный контейнер компонента формы (720px на 408px) */
+
     .consultation-form {
         width: 100%;
         max-width: 720px;
         height: 408px;
-        background-color: #3498db; /* Цвет компонента */
-        border-radius: 16px;       /* Закругление 16px */
-        padding: 24px 64px 32px 64px; /* Паддинги с учетом отступа от заголовка 24px */
+        background-color: #3498db;
+        border-radius: 16px;
+        padding: 24px 64px 32px 64px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -136,18 +136,18 @@
         justify-content: flex-start;
     }
 
-    /* Заголовок формы (24px) */
+
     .consultation-form__title {
         font-size: 24px;
         font-weight: 700;
         margin-bottom: 4px;
     }
 
-    /* Подзаголовок формы (20px) */
+
     .consultation-form__subtitle {
         font-size: 20px;
         font-weight: 400;
-        margin-bottom: 24px; /* Отступ вниз до инпутов */
+        margin-bottom: 24px;
     }
 
     .consultation-form__form {
@@ -158,43 +158,43 @@
         align-items: center;
     }
 
-    /* Ряд инпутов перестраивается в колонку */
+
     .consultation-form__row {
         flex-direction: column;
-        gap: 12px; /* Расстояние между полями ввода */
+        gap: 12px;
         width: 100%;
         align-items: center;
     }
 
-    /* Инпуты (584px на 52px, текст 16px) */
+
     .consultation-form__input {
         width: 584px;
         height: 52px;
         font-size: 16px;
         font-weight: 700;
-        border-radius: 32px; /* Сохраняем овальное скругление по макету */
+        border-radius: 32px;
         padding: 0 24px;
         box-sizing: border-box;
         text-align: left;
     }
 
-    /* Исправление блока ошибки */
+
     .consultation-form__error {
         width: 584px;
-        margin-left: 0; /* Сбрасываем десктопный calc сдвиг */
+        margin-left: 0;
         margin-top: 4px;
         font-size: 14px;
         text-align: left;
-        color: #ff3333; /* Яркий читаемый цвет ошибки на синем фоне */
+        color: #ff3333;
     }
 
-    /* Кнопка отправки (347px на 72px, цвет #1D6FA6, текст 24px) */
+
     .consultation-form__button {
         width: 347px;
         height: 72px;
         margin-top: 24px;
-        background-color: #1D6FA6; /* Цвет кнопки */
-        border-radius: 16px;       /* Закругление кнопки 16px */
+        background-color: #1D6FA6;
+        border-radius: 16px;
         font-size: 24px;
         font-weight: 700;
         display: flex;

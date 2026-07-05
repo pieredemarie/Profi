@@ -99,7 +99,7 @@
     flex-shrink: 0;
 }
 
-/* Одна картинка — занимает большую часть блока */
+
 .card-item__images-wrapper:not(:has(.card-item__image:nth-child(2))) .card-item__image {
     max-width: 85%;
     max-height: 85%;
@@ -196,7 +196,7 @@
     }
 
     .card-item__content {
-        padding-right: 130px; /* пропорционально уменьшаем гуттер */
+        padding-right: 130px;
     }
 
     .card-item__corner {
