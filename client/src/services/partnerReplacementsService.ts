@@ -12,6 +12,7 @@ export interface SearchResultItem {
     partner_organisation_name: string;
     registry_number: string;
     software_class: string;
+    replaces?: string[];
 }
 
 export const fetchReplacementsByClass = async (
@@ -56,6 +57,15 @@ export const fetchSearchResults = async (
     const searchResults = await fetchReplacementsByForeignProduct(foreignProductName, softwareClasses, signal);
     if (searchResults.length === 0) return [];
 
+    if (searchResults.every(result => Array.isArray(result.replaces))) {
+        return searchResults.map(r => ({
+            softwareClass: r.software_class,
+            partnerProductName: r.partner_product_name,
+            registryNumber: r.registry_number,
+            replaces: r.replaces ?? [],
+        }));
+    }
+
     const uniqueClasses = Array.from(new Set(searchResults.map(r => r.software_class)));
     const classData = await Promise.all(
         uniqueClasses.map(cls => fetchReplacementsByClass(cls, signal))
@@ -78,8 +88,8 @@ export const fetchSearchResults = async (
         registryNumber: r.registry_number,
         replaces: replacesMap.get(r.software_class)?.get(r.partner_product_name) ?? [],
     }));
+    
 };
-
 export const fetchSearchResultsByClasses = async (
     softwareClasses: string[],
     signal?: AbortSignal
@@ -89,24 +99,26 @@ export const fetchSearchResultsByClasses = async (
     );
 
     const results: EnrichedResult[] = [];
+
     softwareClasses.forEach((cls, idx) => {
-        const byDomestic = new Map<string, string[]>();
+        const byDomestic = new Map<string, { registryNumber: string; replaces: string[] }>();
+
         classData[idx].forEach(item => {
-            const list = byDomestic.get(item.domestic_product_name) ?? [];
-            list.push(item.foreign_product_name);
-            byDomestic.set(item.domestic_product_name, list);
+            const current = byDomestic.get(item.domestic_product_name) ?? {
+                registryNumber: item.registry_number,
+                replaces: [],
+            };
+
+            current.replaces.push(item.foreign_product_name);
+            byDomestic.set(item.domestic_product_name, current);
         });
 
-        byDomestic.forEach((foreignNames, domesticName) => {
-            const registryNumber = classData[idx].find(
-                item => item.domestic_product_name === domesticName
-            )?.registry_number ?? '';
-
+        byDomestic.forEach((value, domesticName) => {
             results.push({
                 softwareClass: cls,
                 partnerProductName: domesticName,
-                registryNumber,
-                replaces: foreignNames,
+                registryNumber: value.registryNumber,
+                replaces: Array.from(new Set(value.replaces)),
             });
         });
     });
