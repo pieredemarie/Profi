@@ -1,97 +1,72 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ProductCard } from '../components/ui/ProductCard/ProductCard';
 import { ConsultationForm } from '../components/ui/ConsultationForm/ConsultationForm';
 import { ResultsSearchBar } from '../components/ui/ResultsSearchBar/ResultsSearchBar';
 import { Header } from '../components/layout/Header/Header';
 import { Footer } from '../components/layout/Footer/Footer';
+import { fetchSearchResults } from '../services/partnerReplacementsService';
+import type { EnrichedResult } from '../services/partnerReplacementsService';
 import './ResultsPage.css';
 
-interface Product {
-    typeLabel: string;
-    title: string;
-    registryNumber: string;
-    replaces: string[];
+interface SelectedProduct {
+    partnerProductName: string;
 }
 
 export const ResultsPage = () => {
     const location = useLocation();
-    const [query, setQuery] = useState(location.state?.query || 'Cisco Secure Endpoint');
+    const initialQuery = location.state?.query || '';
+    const initialClasses = location.state?.softwareClasses || [];
 
-    // Начальные данные (из перехода или заглушка)
-    const [products, setProducts] = useState<Product[]>(location.state?.products || [
-        {
-            typeLabel: "Антивирусное ПО",
-            title: "Dr.Web Desktop Security Suite",
-            registryNumber: "47",
-            replaces: ["Bitdefender Gravityzone", "Check Point Harmony", "Cisco Secure Endpoint"]
-        },
-        {
-            typeLabel: "Антивирусное ПО",
-            title: "Dr.Web Server Security Suite",
-            registryNumber: "46",
-            replaces: ["Bitdefender Gravityzone", "Cisco Secure Endpoint", "Trend Micro"]
-        },
-        {
-            typeLabel: "Средства мониторинга сетевого трафика и событий",
-            title: "ViPNet IDS HS",
-            registryNumber: "3441",
-            replaces: ["Trend Micro Apex One", "AlienVault", "Cisco Secure Endpoint"]
-        },
-        {
-            typeLabel: "Средства криптозащиты информации",
-            title: "Kaspersky Endpoint Security для бизнеса – Расширенный",
-            registryNumber: "207",
-            replaces: ["Bitdefender Gravityzone", "Cisco Secure Endpoint", "CrowdStrike Falcon"]
+    const [query, setQuery] = useState(initialQuery);
+    const [results, setResults] = useState<EnrichedResult[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<SelectedProduct | null>(null);
+
+    const runSearch = useCallback(async (searchQuery: string, softwareClasses: string[] = []) => {
+        if (!searchQuery.trim()) return;
+        setIsLoading(true);
+        setError(null);
+        try {
+            const data = await fetchSearchResults(searchQuery, softwareClasses);
+            setResults(data);
+        } catch (err) {
+            console.error(err);
+            setError('Не удалось загрузить результаты. Попробуйте ещё раз.');
+        } finally {
+            setIsLoading(false);
         }
-    ]);
+    }, []);
 
-    const [classes, setClasses] = useState<string[]>(location.state?.softwareClasses || [
-        "Антивирусное ПО",
-        "Средства мониторинга сетевого трафика и событий",
-        "Средства криптозащиты информации"
-    ]);
+    useEffect(() => {
+        runSearch(initialQuery, initialClasses);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    // 🔥 Функция поиска: запрос на бэк + обновление состояния
-    const handleSearch = async (newQuery: string) => {
-        if (!newQuery.trim()) return;
-
+    const handleSearch = (newQuery: string, softwareClasses: string[] = []) => {
         setQuery(newQuery);
-
-        // Имитация запроса к бэкенду (замените на реальный fetch)
-        console.log(`[MOCK] Запрос на бэк: ${newQuery}`);
-
-        // ВРЕМЕННО: эмулируем ответ с новыми данными
-        const mockResponse = [
-            {
-                typeLabel: "Средства мониторинга сетевого трафика и событий",
-                title: `Результат для: ${newQuery}`,
-                registryNumber: "999",
-                replaces: ["Mock System 1", "Mock System 2"]
-            },
-            {
-                typeLabel: "Антивирусное ПО",
-                title: "Dr.Web New Version",
-                registryNumber: "101",
-                replaces: ["Bitdefender", "Cisco"]
-            }
-        ];
-
-        // Симуляция задержки сети
-        setTimeout(() => {
-            setProducts(mockResponse as Product[]);
-            setClasses(["Средства мониторинга сетевого трафика и событий", "Антивирусное ПО"]);
-        }, 500);
+        setSelectedProduct(null);
+        runSearch(newQuery, softwareClasses);
     };
 
-    const groupedProducts = classes.map((cls) => ({
-        className: cls,
-        items: products.filter(p => p.typeLabel === cls)
-    }));
+    const groupedResults = Array.from(
+        results.reduce((map, item) => {
+            const list = map.get(item.softwareClass) ?? [];
+            list.push(item);
+            map.set(item.softwareClass, list);
+            return map;
+        }, new Map<string, EnrichedResult[]>())
+    );
+
+    const handleConsultationClick = (partnerProductName: string) => {
+        setSelectedProduct({ partnerProductName });
+        document.getElementById('consultation-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <div className="results-page">
-            <Header showShadow={false} showHomeButton={true}/>
+            <Header showShadow={false} showHomeButton={true} />
 
             <div className="results-page__blue-header">
                 <div className="results-page__blue-container">
@@ -100,43 +75,51 @@ export const ResultsPage = () => {
                         <span className="results-page__main-title--underline">{query}</span>
                     </h1>
 
-
                     <div className="results-page__search-wrapper">
                         <ResultsSearchBar
                             initialQuery={query}
-                            onSearch={handleSearch} // Теперь при нажатии кнопки вызывается эта функция
-                            onTypeChange={(types) => console.log('Выбраны типы:', types)}
+                            onSearch={handleSearch}
+                            onTypeChange={() => {}}
                         />
                     </div>
                 </div>
             </div>
 
             <div className="results-page__main">
-                {groupedProducts.map((group) => (
-                    group.items.length > 0 && (
-                        <div key={group.className} className="results-page__group">
-                            <h2 className="results-page__group-title">{group.className}</h2>
-                            <div className="results-page__grid">
-                                {group.items.map((product, index) => (
-                                    <ProductCard
-                                        key={index}
-                                        typeLabel={product.typeLabel}
-                                        title={product.title}
-                                        registryNumber={product.registryNumber}
-                                        replaces={product.replaces}
-                                        onConsultationClick={() => {
-                                            const form = document.getElementById('consultation-form');
-                                            if (form) form.scrollIntoView({ behavior: 'smooth' });
-                                        }}
-                                    />
-                                ))}
-                            </div>
+                {isLoading && <p>Загрузка...</p>}
+                {error && <p>{error}</p>}
+                {!isLoading && !error && groupedResults.length === 0 && (
+                    <div className="results-page__empty">
+                        <h2 className="results-page__empty-title">Не найдены подходящие решения</h2>
+                        <p className="results-page__empty-subtitle">
+                            Оставьте заявку, и мы подберем возможные варианты импортозамещения
+                        </p>
+                    </div>
+                )}
+
+                {groupedResults.map(([className, items]) => (
+                    <div key={className} className="results-page__group">
+                        <h2 className="results-page__group-title">{className}</h2>
+                        <div className="results-page__grid">
+                            {items.map((item) => (
+                                <ProductCard
+                                    key={`${item.partnerProductName}-${item.registryNumber}`}
+                                    typeLabel={item.softwareClass}
+                                    title={item.partnerProductName}
+                                    registryNumber={item.registryNumber}
+                                    replaces={item.replaces}
+                                    onConsultationClick={() => handleConsultationClick(item.partnerProductName)}
+                                />
+                            ))}
                         </div>
-                    )
+                    </div>
                 ))}
 
-                <div className="results-page__form-wrapper" id="consultation-form">
-                    <ConsultationForm />
+                <div className="results-page__form-wrapper">
+                    <ConsultationForm
+                        foreignProductName={query}
+                        partnerReplacement={selectedProduct?.partnerProductName ?? ''}
+                    />
                 </div>
             </div>
 
