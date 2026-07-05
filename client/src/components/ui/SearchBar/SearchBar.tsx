@@ -1,28 +1,39 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './SearchBar.css';
 import { useAutocomplete } from '../../../hooks/useAutocomplete';
+import { fetchSoftwareClasses } from '../../../services/softwareClassesService';
 
 interface SearchBarProps {
-    onSearch?: (query: string) => void;
+    onSearch?: (query: string, selectedTypes: string[]) => void;
     onTypeChange?: (types: string[]) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) => {
-    const { query, suggestions, handleQueryChange } = useAutocomplete(300);
-
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+    const { query, suggestions, handleQueryChange } = useAutocomplete(300, selectedTypes);
+
+    const [softwareTypes, setSoftwareTypes] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    const softwareTypes = [
-        'Антивирусное ПО',
-        'Резервное копирование',
-        'Офисные приложения',
-        'Корпоративные карты'
-    ];
+    useEffect(() => {
+        const controller = new AbortController();
+        fetchSoftwareClasses(controller.signal)
+            .then(setSoftwareTypes)
+            .catch((err) => {
+                if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+                    console.error('Не удалось загрузить типы ПО:', err);
+                }
+            });
+        return () => controller.abort();
+    }, []);
 
+    useEffect(() => {
+        onTypeChange?.(selectedTypes);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTypes]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -37,21 +48,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
-        setShowSuggestions(false); // если открыли тип ПО — прячем автодополнение
+        setShowSuggestions(false);
     };
 
     const handleCheckboxChange = (type: string) => {
         setSelectedTypes(prev =>
-            prev.includes(type)
-                ? prev.filter(t => t !== type)
-                : [...prev, type]
+            prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
         );
-        if (onTypeChange) onTypeChange(selectedTypes);
     };
 
     const handleSearch = () => {
         setShowSuggestions(false);
-        if (onSearch) onSearch(query);
+        onSearch?.(query, selectedTypes);
     };
 
     const handleInputChange = (value: string) => {
@@ -63,21 +71,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
         if (suggestions.length > 0) setShowSuggestions(true);
     };
 
-
     const handleSuggestionClick = (value: string) => {
         handleQueryChange(value);
         setShowSuggestions(false);
-        if (onSearch) onSearch(value);
+        onSearch?.(value, selectedTypes);
     };
 
     return (
         <div className="search-bar__wrapper" ref={wrapperRef}>
-
-
             <div className="search-bar__input-wrapper">
                 <div className="search-bar__dropdown-group">
-
-
                     <div className={`search-bar__input-container ${showSuggestions && suggestions.length > 0 ? 'has-suggestions' : ''}`}>
                         <svg className="search-bar__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b0b0b0" strokeWidth="2">
                             <circle cx="11" cy="11" r="8" />
@@ -94,7 +97,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                         />
                     </div>
 
-
                     {showSuggestions && suggestions.length > 0 && (
                         <div className="search-bar__suggestions">
                             {suggestions.map((item) => (
@@ -110,7 +112,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                     )}
                 </div>
             </div>
-
 
             <div className="search-bar__dropdown-wrapper">
                 <button
@@ -139,7 +140,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                     </div>
                 )}
             </div>
-
 
             <button className="search-bar__button" onClick={handleSearch}>
                 Найти решения
