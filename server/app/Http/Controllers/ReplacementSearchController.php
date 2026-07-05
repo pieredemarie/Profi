@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ImportReplacement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ReplacementSearchController extends Controller
 {
@@ -38,29 +39,102 @@ class ReplacementSearchController extends Controller
             return response()->json([]);
         }
 
-        $matches = ImportReplacement::query()
-            ->select([
-                'foreign_product_name',
-                'domestic_product_name',
-                'registry_number',
-                'software_class',
-            ])
-            ->whereNotNull('software_class')
-            ->whereRaw(
-                'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
-                ['%|'.$this->escapeLike($softwareClass).'|%']
-            )
-            ->whereHas('partnerReplacements')
-            ->orderBy('foreign_product_name')
-            ->orderBy('domestic_product_name')
-            ->get()
-            ->map(fn (ImportReplacement $replacement): array => [
-                'foreign_product_name' => $replacement->foreign_product_name,
-                'domestic_product_name' => $replacement->domestic_product_name,
-                'registry_number' => $replacement->registry_number,
-                'software_class' => $replacement->software_class,
-            ])
-            ->values();
+        $cacheKey = 'partner_replacements_by_software_class:'.sha1($softwareClass);
+
+        $matches = Cache::remember($cacheKey, now()->addMinutes(15), function () use ($softwareClass) {
+            return ImportReplacement::query()
+                ->select([
+                    'foreign_product_name',
+                    'domestic_product_name',
+                    'registry_number',
+                    'software_class',
+                ])
+                ->whereNotNull('software_class')
+                ->whereRaw(
+                    'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
+                    ['%|'.$this->escapeLike($softwareClass).'|%']
+                )
+                ->whereHas('partnerReplacements')
+                ->orderBy('foreign_product_name')
+                ->orderBy('domestic_product_name')
+                ->get()
+                ->map(fn (ImportReplacement $replacement): array => [
+                    'foreign_product_name' => $replacement->foreign_product_name,
+                    'domestic_product_name' => $replacement->domestic_product_name,
+                    'registry_number' => $replacement->registry_number,
+                    'software_class' => $replacement->software_class,
+                ])
+                ->values();
+        });
+
+        return response()->json($matches);
+    }
+
+    public function partnerReplacementsByForeignProductName(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'foreign_product_name' => ['required', 'string', 'max:500'],
+        ]);
+
+        $foreignProductName = $this->normalizeQuery($validated['foreign_product_name']);
+        $softwareClasses = $this->normalizeSoftwareClasses($request->query('software_classes', []));
+
+        if ($foreignProductName === '') {
+            return response()->json([]);
+        }
+
+        $cacheSoftwareClasses = $softwareClasses;
+        sort($cacheSoftwareClasses);
+
+        $cacheKey = 'partner_replacements_by_foreign_product:'.sha1(json_encode([
+            'foreign_product_name' => $foreignProductName,
+            'software_classes' => $cacheSoftwareClasses,
+        ]));
+
+        $matches = Cache::remember($cacheKey, now()->addMinutes(15), function () use ($foreignProductName, $softwareClasses) {
+            $importReplacements = ImportReplacement::query()
+                ->select([
+                    'foreign_product_name',
+                    'registry_number',
+                    'software_class',
+                ])
+                ->with([
+                    'partnerReplacements' => function ($query): void {
+                        $query->select([
+                            'partner_product_name',
+                            'partner_organisation_name',
+                            'registry_number',
+                        ]);
+                    },
+                ])
+                ->where('foreign_product_name', $foreignProductName)
+                ->when($softwareClasses !== [], function ($query) use ($softwareClasses): void {
+                    $query->where(function ($query) use ($softwareClasses): void {
+                        foreach ($softwareClasses as $softwareClass) {
+                            $query->orWhereRaw(
+                                'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
+                                ['%|'.$this->escapeLike($softwareClass).'|%']
+                            );
+                        }
+                    });
+                })
+                ->whereHas('partnerReplacements')
+                ->orderBy('registry_number')
+                ->get();
+
+            return $importReplacements
+                ->flatMap(function (ImportReplacement $importReplacement): array {
+                    return $importReplacement->partnerReplacements
+                        ->map(fn ($partnerReplacement): array => [
+                            'partner_product_name' => $partnerReplacement->partner_product_name,
+                            'partner_organisation_name' => $partnerReplacement->partner_organisation_name,
+                            'registry_number' => $partnerReplacement->registry_number,
+                            'software_class' => $importReplacement->software_class,
+                        ])
+                        ->all();
+                })
+                ->values();
+        });
 
         return response()->json($matches);
     }
@@ -78,70 +152,11 @@ class ReplacementSearchController extends Controller
             $value
         );
     }
-    public function partnerReplacementsByForeignProductName(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'foreign_product_name' => ['required', 'string', 'max:500'],
-        ]);
-
-        $foreignProductName = $this->normalizeQuery($validated['foreign_product_name']);
-        $softwareClasses = $this->normalizeSoftwareClasses($request->query('software_classes', []));
-
-        if ($foreignProductName === '') {
-            return response()->json([]);
-        }
-
-        $importReplacements = ImportReplacement::query()
-            ->select([
-                'foreign_product_name',
-                'registry_number',
-                'software_class',
-            ])
-            ->with([
-                'partnerReplacements' => function ($query): void {
-                    $query->select([
-                        'partner_product_name',
-                        'partner_organisation_name',
-                        'registry_number',
-                    ]);
-                },
-            ])
-            ->where('foreign_product_name', $foreignProductName)
-            ->when($softwareClasses !== [], function ($query) use ($softwareClasses): void {
-                $query->where(function ($query) use ($softwareClasses): void {
-                    foreach ($softwareClasses as $softwareClass) {
-                        $query->orWhereRaw(
-                            'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
-                            ['%|'.$this->escapeLike($softwareClass).'|%']
-                        );
-                    }
-                });
-            })
-            ->whereHas('partnerReplacements')
-            ->orderBy('registry_number')
-            ->get();
-
-        $matches = $importReplacements
-            ->flatMap(function (ImportReplacement $importReplacement): array {
-                return $importReplacement->partnerReplacements
-                    ->map(fn ($partnerReplacement): array => [
-                        'partner_product_name' => $partnerReplacement->partner_product_name,
-                        'partner_organisation_name' => $partnerReplacement->partner_organisation_name,
-                        'registry_number' => $partnerReplacement->registry_number,
-                        'software_class' => $importReplacement->software_class,
-                    ])
-                    ->all();
-            })
-            ->values();
-
-        return response()->json($matches);
-    }
 
     private function normalizeQuery(string $query): string
     {
         return trim(preg_replace('/\s+/u', ' ', $query));
     }
-
 
     private function normalizeSoftwareClasses(mixed $softwareClasses): array
     {
@@ -160,5 +175,4 @@ class ReplacementSearchController extends Controller
             ->values()
             ->all();
     }
-
 }
