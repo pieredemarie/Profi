@@ -9,6 +9,8 @@ interface ProductCardProps {
     onConsultationClick?: () => void;
 }
 
+const MAX_REPLACES_SHOWN = 4;
+
 export const ProductCard: React.FC<ProductCardProps> = ({
                                                             typeLabel,
                                                             title,
@@ -16,7 +18,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                                                             replaces,
                                                             onConsultationClick,
                                                         }) => {
-    const replacesText = replaces.join(', ');
+    const visibleReplaces = replaces.slice(0, MAX_REPLACES_SHOWN);
+    const hiddenCount = replaces.length - visibleReplaces.length;
+
+    const replacesText = hiddenCount > 0
+        ? `${visibleReplaces.join(', ')}...`
+        : visibleReplaces.join(', ');
 
     return (
         <div className="product-card">
