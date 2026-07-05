@@ -1,47 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './ResultsSearchBar.css';
+import { fetchSoftwareClasses } from '../../../services/softwareClassesService';
 
 interface ResultsSearchBarProps {
     initialQuery?: string;
-    onSearch?: (query: string) => void;
+    onSearch?: (query: string, selectedTypes: string[]) => void;
     onTypeChange?: (types: string[]) => void;
 }
 
 export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
-                                                                      initialQuery = 'Cisco Secure Endpoint',
+                                                                      initialQuery = '',
                                                                       onSearch,
                                                                       onTypeChange
                                                                   }) => {
     const [query, setQuery] = useState(initialQuery);
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+    const [softwareTypes, setSoftwareTypes] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
 
-    const softwareTypes = [
-        'Антивирусное ПО',
-        'Резервное копирование',
-        'Офисные приложения',
-        'Корпоративные карты'
-    ];
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    // Синхронизируем инпут, если query на странице изменился снаружи
+    // (например, после клика по тегу на главной и повторного захода)
+    useEffect(() => {
+        setQuery(initialQuery);
+    }, [initialQuery]);
+
+    // Реальный список типов ПО вместо хардкода
+    useEffect(() => {
+        const controller = new AbortController();
+        fetchSoftwareClasses(controller.signal)
+            .then(setSoftwareTypes)
+            .catch((err) => {
+                if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+                    console.error('Не удалось загрузить типы ПО:', err);
+                }
+            });
+        return () => controller.abort();
+    }, []);
+
+    // onTypeChange вызывается после реального обновления стейта
+    useEffect(() => {
+        onTypeChange?.(selectedTypes);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTypes]);
+
+    // Закрытие дропдауна по клику вне компонента
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleToggle = () => setIsOpen(!isOpen);
 
     const handleCheckboxChange = (type: string) => {
         setSelectedTypes(prev =>
-            prev.includes(type)
-                ? prev.filter(t => t !== type)
-                : [...prev, type]
+            prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
         );
-        if (onTypeChange) onTypeChange(selectedTypes);
     };
 
     const handleSearch = () => {
-        if (onSearch && query.trim()) {
-            onSearch(query);
+        if (query.trim()) {
+            onSearch?.(query, selectedTypes);
         }
     };
 
     return (
-        <div className="results-search-bar__wrapper">
+        <div className="results-search-bar__wrapper" ref={wrapperRef}>
             <div className="results-search-bar__input-wrapper">
                 <input
                     type="text"
@@ -81,11 +111,7 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
                 )}
             </div>
 
-            <button
-                className="results-search-bar__button"
-                onClick={handleSearch}
-                // disabled убран — кнопка всегда активна
-            >
+            <button className="results-search-bar__button" onClick={handleSearch}>
                 Найти решения
             </button>
         </div>
