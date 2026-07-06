@@ -32,7 +32,7 @@
     text-align: left;
 }
 
-/* --- ДРОПДАУН --- */
+
 .results-search-bar__dropdown-wrapper {
     position: relative;
     width: 299px;
@@ -82,7 +82,7 @@
     top: 60px;
     left: 0;
     width: 100%;
-    /* ИСПРАВЛЕНО: Цвет фона в тон триггера, как на макете image_842dc1.png */
+
     background-color: #F4F4F4;
     border: 1px solid #717171;
     border-top: none;
@@ -95,33 +95,32 @@
     gap: 12px;
     max-height: 0;
     opacity: 0;
-    overflow: hidden; /* Скрыто в закрытом состоянии */
+    overflow: hidden;
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     z-index: 51;
     box-sizing: border-box;
 }
 
 .results-search-bar__dropdown-menu.open {
-    /* ИСПРАВЛЕНО: Убираем фиксированную высоту и скроллбар, чтобы дать тексту простор */
     max-height: 500px;
     opacity: 1;
     padding: 20px 24px 28px 24px;
+    overflow-y: auto;
 }
 
-/* --- СТРОКА С ТЕКСТОМ И ЧЕКБОКСОМ --- */
+
 .results-search-bar__dropdown-item {
     display: flex;
-    align-items: center; /* Центрируем чекбокс и текст по вертикальной оси */
-    justify-content: space-between; /* Текст уходит влево, чекбокс строго вправо */
+    align-items: center;
+    justify-content: space-between;
     cursor: pointer;
     padding: 4px 0;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* --- ТЕКСТ (СЛЕВА) --- */
+
 .results-search-bar__dropdown-text {
-    /* ИСПРАВЛЕНО: Шрифт крупнее, как на образце */
     font-size: 20px;
     font-weight: 500;
     font-family: 'Mulish', sans-serif;
@@ -129,29 +128,28 @@
     color: #111111;
     line-height: 1.2;
     flex: 1;
-    order: 1; /* Железно первый (слева) */
+    order: 1;
 }
 
-/* --- ЧЕКБОКС (СПРАВА) --- */
 .results-search-bar__dropdown-checkbox {
     width: 20px;
     height: 20px;
-    flex-shrink: 0; /* Чекбокс больше не сжимается */
+    flex-shrink: 0;
     cursor: pointer;
     margin: 0 0 0 12px;
-    order: 2; /* Железно второй (справа) */
+    order: 2;
 }
 
-/* --- ТЕКСТ (ТЕПЕРЬ СПРАВА) --- */
+
 .results-search-bar__dropdown-text {
-    /* ИСПРАВЛЕНО: Уменьшили шрифт до 16px, чтобы всё помещалось без дурацких переносов */
+
     font-size: 16px;
     font-weight: 500;
     font-family: 'Mulish', sans-serif;
     text-align: left;
     line-height: 1.3;
     word-break: normal;
-    order: 2; /* Встает сразу после чекбокса */
+    order: 2;
 }
 
 .results-search-bar__button {
@@ -179,12 +177,12 @@
         justify-content: center;
         gap: 16px;
         max-width: 100%;
-        padding: 0 135px;   /* было 24px — теперь соответствует карточкам */
+        padding: 0 135px;
     }
 
     .results-search-bar__input-wrapper {
         flex: 1 1 auto;
-        min-width: 120px;   /* было 200 — даём больше запаса на узких ширинах */
+        min-width: 120px;
         height: 40px;
         background-color: #F4F4F4;
         border: 1px solid #717171;
@@ -205,7 +203,7 @@
     }
 
     .results-search-bar__dropdown-wrapper {
-        width: 130px;       /* было 157 */
+        width: 130px;
         flex-shrink: 0;
         height: 40px;
     }
@@ -223,7 +221,7 @@
         border: 1px solid #717171;
         border-radius: 32px;
         color: #111111;
-        padding: 0 16px; /* Уменьшили паддинг, чтобы влезло слово «Тип ПО» и стрелочка */
+        padding: 0 16px;
         box-sizing: border-box;
     }
 
@@ -248,20 +246,20 @@
         border-bottom-right-radius: 20px;
         box-sizing: border-box;
         z-index: 51;
-        padding: 0 12px; /* Чуть уменьшаем отступы по краям для узкого экрана */
+        padding: 0 12px;
     }
 
     .results-search-bar__dropdown-menu.open {
-        max-height: 500px; /* Увеличили запас по высоте, чтобы убрать скролл */
+        max-height: 500px;
         opacity: 1;
         padding: 12px 12px 16px 12px;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        overflow-y: visible; /* Убираем скроллбар, ломающий верстку */
+        overflow-y: visible;
     }
 
-    /* ИСПРАВЛЕНО: Четкое распределение «текст слева / чекбокс справа» для мобилок */
+
     .results-search-bar__dropdown-item {
         display: flex;
         align-items: center;
@@ -272,7 +270,7 @@
         box-sizing: border-box;
     }
 
-    /* ИСПРАВЛЕНО: Уменьшаем шрифт текста в меню до 13px, чтобы он помещался в ширину 157px */
+
     .results-search-bar__dropdown-text {
         font-size: 13px;
         font-weight: 500;
@@ -280,20 +278,20 @@
         line-height: 1.2;
         text-align: left;
         flex: 1;
-        order: 1; /* Текст гарантированно слева */
+        order: 1;
     }
 
-    /* ИСПРАВЛЕНО: Фиксируем мобильный чекбокс */
+
     .results-search-bar__dropdown-checkbox {
         width: 16px;
         height: 16px;
         flex-shrink: 0;
         margin: 0;
-        order: 2; /* Чекбокс гарантированно справа */
+        order: 2;
     }
 
     .results-search-bar__button {
-        width: 150px;       /* было 196 */
+        width: 150px;
         height: 40px;
         flex-shrink: 0;
         padding: 0 12px;
@@ -325,7 +323,7 @@
         display: grid;
         grid-template-columns: 4fr 1fr;
         gap: 8px 10px;
-        padding: 0 44px;   /* было 16px */
+        padding: 0 44px;
     }
 
     .results-search-bar__input-wrapper {
@@ -355,7 +353,6 @@
         gap: 4px;
     }
 
-    /* Кнопка — вторая строка, ровно под инпутом */
     .results-search-bar__button {
         grid-column: 1;
         grid-row: 2;
