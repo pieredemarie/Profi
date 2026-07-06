@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ImportReplacement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class AutocompleteController extends Controller
 {
@@ -17,44 +19,27 @@ class AutocompleteController extends Controller
             return response()->json([]);
         }
 
-        $search = mb_strtolower($query, 'UTF-8');
-        $like = '%'.$this->escapeLike($search).'%';
-        $prefixLike = $this->escapeLike($search).'%';
+        $cacheSoftwareClasses = $softwareClasses;
+        sort($cacheSoftwareClasses);
 
-        $matches = ImportReplacement::query()
-            ->select('foreign_product_name')
-            ->whereRaw('LOWER(foreign_product_name) LIKE ? ESCAPE "\\\\"', [$like])
-            ->when($softwareClasses !== [], function ($query) use ($softwareClasses): void {
-                $query->where(function ($query) use ($softwareClasses): void {
-                    foreach ($softwareClasses as $softwareClass) {
-                        $query->orWhereRaw(
-                            'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
-                            ['%|'.$this->escapeLike($softwareClass).'|%']
-                        );
-                    }
-                });
-            })
-            ->distinct()
-            ->orderByRaw(
-                '
-                CASE
-                    WHEN LOWER(foreign_product_name) = ? THEN 0
-                    WHEN LOWER(foreign_product_name) LIKE ? ESCAPE "\\\\" THEN 1
-                    ELSE 2
-                END
-                ',
-                [$search, $prefixLike]
-            )
-            ->orderByRaw('LOCATE(?, LOWER(foreign_product_name))', [$search])
-            ->orderByRaw('CHAR_LENGTH(foreign_product_name)')
-            ->orderBy('foreign_product_name')
-            ->limit(5)
-            ->pluck('foreign_product_name')
-            ->map(fn (string $name) => [
-                'label' => $name,
-                'value' => $name,
-            ])
-            ->values();
+        $cacheKey = 'autocomplete_import_replacements:'.sha1(json_encode([
+            'query' => mb_strtolower($query, 'UTF-8'),
+            'software_classes' => $cacheSoftwareClasses,
+        ]));
+
+        $matches = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($query, $softwareClasses): Collection {
+            $containsLike = '%'.$this->escapeLike($query).'%';
+
+            $containsMatches = $this->autocompleteQuery($softwareClasses)
+                ->where('foreign_product_name', 'LIKE', $containsLike)
+                ->orderByRaw('LOCATE(?, foreign_product_name)', [$query])
+                ->orderByRaw('CHAR_LENGTH(foreign_product_name)')
+                ->orderBy('foreign_product_name')
+                ->limit(5)
+                ->pluck('foreign_product_name');
+
+            return $this->formatMatches($containsMatches);
+        });
 
         return response()->json($matches);
     }
@@ -89,5 +74,34 @@ class AutocompleteController extends Controller
             ['\\\\', '\\%', '\\_'],
             $value
         );
+    }
+
+    private function autocompleteQuery(array $softwareClasses)
+    {
+        return ImportReplacement::query()
+            ->select('foreign_product_name')
+            ->when($softwareClasses !== [], function ($query) use ($softwareClasses): void {
+                $query->where(function ($query) use ($softwareClasses): void {
+                    foreach ($softwareClasses as $softwareClass) {
+                        $query->orWhereRaw(
+                            'CONCAT("|", REPLACE(software_class, " | ", "|"), "|") LIKE ? ESCAPE "\\\\"',
+                            ['%|'.$this->escapeLike($softwareClass).'|%']
+                        );
+                    }
+                });
+            })
+            ->distinct();
+    }
+
+    private function formatMatches(Collection $matches): Collection
+    {
+        return $matches
+            ->unique()
+            ->take(5)
+            ->map(fn (string $name) => [
+                'label' => $name,
+                'value' => $name,
+            ])
+            ->values();
     }
 }
