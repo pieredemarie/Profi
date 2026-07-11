@@ -15,8 +15,16 @@ RUN install-php-extensions \
     gd \
     intl \
     mbstring \
+    opcache \
     pdo_mysql \
     zip
+
+RUN { \
+    echo 'opcache.enable=1'; \
+    echo 'opcache.memory_consumption=256'; \
+    echo 'opcache.max_accelerated_files=20000'; \
+    echo 'opcache.validate_timestamps=0'; \
+  } > /usr/local/etc/php/conf.d/zz-opcache.ini
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
