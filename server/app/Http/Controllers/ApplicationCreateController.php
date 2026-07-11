@@ -7,6 +7,9 @@ use App\Models\ImportReplacement;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\ApplicationSubmitted;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ApplicationCreateController extends Controller
 {
@@ -100,6 +103,12 @@ class ApplicationCreateController extends Controller
             'full_name' => $validated['full_name'] ?? null,
             'partner_replacement' => $validated['partner_replacement'] ?? null,
         ]);
+
+        try {
+            Mail::to(config('mail.application_recipient'))->send(new ApplicationSubmitted($application));
+        } catch (\Throwable $e) {
+            Log::error('Failed to send application email: '.$e->getMessage());
+        }
 
         return response()->json([
             'message' => 'Application created successfully.',
