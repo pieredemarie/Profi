@@ -7,11 +7,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-
+use Illuminate\Support\Facades\Log;
 class AutocompleteController extends Controller
 {
     public function importReplacements(Request $request): JsonResponse
     {
+
         $query = $this->normalizeQuery($request->query('query', ''));
         $softwareClasses = $this->normalizeSoftwareClasses($request->query('software_classes', []));
 
@@ -42,6 +43,7 @@ class AutocompleteController extends Controller
         });
 
         return response()->json($matches);
+
     }
 
     private function normalizeQuery(mixed $query): string
