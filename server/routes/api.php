@@ -24,4 +24,3 @@ Route::get(
 );
 
 Route::post('/applications', [ApplicationCreateController::class, 'store']);
-Route::get('/checkmail', fn () => config('mail.application_recipient'));
