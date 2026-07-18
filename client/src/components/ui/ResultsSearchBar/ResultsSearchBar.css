@@ -170,6 +170,39 @@
     background-color: #155a8a;
 }
 
+
+.results-search-bar__input-wrapper {
+    position: relative;   /* добавить, если ещё нет — нужно для absolute-позиционирования подсказок */
+}
+
+.results-search-bar__suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin-top: 4px;
+    background-color: #ffffff;
+    border: 1px solid #717171;
+    border-radius: 16px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 100;
+}
+
+.results-search-bar__suggestion-item {
+    padding: 10px 20px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #111111;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+.results-search-bar__suggestion-item:hover {
+    background-color: #DEDEDE;
+}
+
 @media (max-width: 995px) {
     .results-search-bar__wrapper {
         flex-wrap: nowrap;
