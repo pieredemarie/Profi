@@ -89,7 +89,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
                         <input
                             type="text"
                             className="search-bar__input"
-                            placeholder="Например: FortiGate IPS"
+                            placeholder='"FortiGate IPS" или "СУБД"'
                             value={query}
                             onChange={(e) => handleInputChange(e.target.value)}
                             onFocus={handleInputFocus}
