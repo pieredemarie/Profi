@@ -36,9 +36,10 @@ class ApplicationCreateController extends Controller
                 'regex:/^\+7\d{10}$/',
                 'not_regex:/^\+7(\d)\1{9}$/',
             ],
-            'full_name' => ['nullable', 'string', 'max:255'],
+            'full_name' => ['required', 'string', 'max:255'],
             'partner_replacement' => ['nullable', 'string', 'max:1000'],
         ], [
+            'full_name.required' => 'Укажите ФИО.',
             'phone_number.regex' => 'Неверный формат телефона.',
             'phone_number.not_regex' => 'Неверный формат телефона.',
         ]);
