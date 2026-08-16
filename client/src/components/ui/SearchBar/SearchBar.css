@@ -169,6 +169,7 @@
     color: #111111;
     text-align: left;
     cursor: text;
+    font-style: italic;
 }
 .search-bar__dropdown-search-input[readonly] {
     cursor: pointer;

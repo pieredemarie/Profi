@@ -106,6 +106,7 @@
     color: #111111;
     text-align: left;
     cursor: text;
+    font-style: italic;
 }
 .results-search-bar__dropdown-search-input[readonly] {
     cursor: pointer;
@@ -237,7 +238,7 @@
     border: none;
     border-radius: 32px;
     font-family: 'Mulish', sans-serif;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     cursor: pointer;
     transition: background 0.2s ease;
