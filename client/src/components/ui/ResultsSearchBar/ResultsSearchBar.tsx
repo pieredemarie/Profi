@@ -18,6 +18,7 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
     const { query, suggestions, handleQueryChange } = useAutocomplete(300, selectedTypes);
 
     const [softwareTypes, setSoftwareTypes] = useState<string[]>([]);
+    const [sortedTypes, setSortedTypes] = useState<string[]>([]);
     const [typeFilter, setTypeFilter] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -57,6 +58,22 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Фикс №3: сортировка (выбранные наверх) только при ОТКРЫТИИ дропдауна,
+    // а не при каждом клике по чекбоксу — список не "прыгает" под пальцем
+    useEffect(() => {
+        if (isOpen) {
+            const sorted = [...softwareTypes].sort((a, b) => {
+                const aSelected = selectedTypes.includes(a);
+                const bSelected = selectedTypes.includes(b);
+                if (aSelected && !bSelected) return -1;
+                if (!aSelected && bSelected) return 1;
+                return 0;
+            });
+            setSortedTypes(sorted);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, softwareTypes]);
+
     const handleToggle = () => {
         setIsOpen(!isOpen);
         setShowSuggestions(false);
@@ -95,15 +112,9 @@ export const ResultsSearchBar: React.FC<ResultsSearchBarProps> = ({
         onSearch?.(value, selectedTypes);
     };
 
-    const filteredTypes = softwareTypes
-        .filter(type => type.toLowerCase().includes(typeFilter.toLowerCase()))
-        .sort((a, b) => {
-            const aSelected = selectedTypes.includes(a);
-            const bSelected = selectedTypes.includes(b);
-            if (aSelected && !bSelected) return -1;
-            if (!aSelected && bSelected) return 1;
-            return 0;
-        });
+    const filteredTypes = sortedTypes.filter(type =>
+        type.toLowerCase().includes(typeFilter.toLowerCase())
+    );
 
     return (
         <div className="results-search-bar__wrapper" ref={wrapperRef}>

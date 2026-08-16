@@ -21,6 +21,15 @@ export const ResultsPage = () => {
     const [query, setQuery] = useState(
         initialQuery.trim() ? initialQuery : initialClasses.join(', ')
     );
+
+    const MAX_CLASSES_SHOWN = 2;
+
+    const formatQueryLabel = (q: string, classes: string[]): string => {
+        if (q.trim()) return q;
+        if (classes.length <= MAX_CLASSES_SHOWN) return classes.join(', ');
+        return `${classes.slice(0, MAX_CLASSES_SHOWN).join(', ')} и другие`;
+    };
+
     const [results, setResults] = useState<EnrichedResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -53,7 +62,7 @@ export const ResultsPage = () => {
     }, []);
 
     const handleSearch = (newQuery: string, softwareClasses: string[] = []) => {
-        setQuery(newQuery.trim() ? newQuery : softwareClasses.join(', '));
+        setQuery(formatQueryLabel(newQuery, softwareClasses));
         setSelectedProduct(null);
         runSearch(newQuery, softwareClasses);
     };
