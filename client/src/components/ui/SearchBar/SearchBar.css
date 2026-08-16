@@ -152,7 +152,7 @@
     max-height: 450px;
     opacity: 1;
     padding: 20px 32px 20px 32px;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
 /* Поле поиска внутри дропдауна (фильтр по списку типов) */
@@ -183,7 +183,7 @@
 .search-bar__dropdown-list {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
 .search-bar__dropdown-item {

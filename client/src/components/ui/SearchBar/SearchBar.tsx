@@ -13,6 +13,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
     const { query, suggestions, handleQueryChange } = useAutocomplete(300, selectedTypes);
 
     const [softwareTypes, setSoftwareTypes] = useState<string[]>([]);
+    const [sortedTypes, setSortedTypes] = useState<string[]>([]);
     const [typeFilter, setTypeFilter] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -47,10 +48,26 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Пересортировка (выбранные наверх) ТОЛЬКО в момент открытия дропдауна.
+    // Пока меню открыто, клики по чекбоксам порядок не меняют — список не прыгает.
+    useEffect(() => {
+        if (isOpen) {
+            const sorted = [...softwareTypes].sort((a, b) => {
+                const aSelected = selectedTypes.includes(a);
+                const bSelected = selectedTypes.includes(b);
+                if (aSelected && !bSelected) return -1;
+                if (!aSelected && bSelected) return 1;
+                return 0;
+            });
+            setSortedTypes(sorted);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, softwareTypes]);
+
     const handleToggle = () => {
         setIsOpen(!isOpen);
         setShowSuggestions(false);
-        if (isOpen) setTypeFilter(''); // сбрасываем фильтр при закрытии
+        if (isOpen) setTypeFilter('');
     };
 
     const handleCheckboxChange = (type: string) => {
@@ -83,15 +100,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
         onSearch?.(value, selectedTypes);
     };
 
-    const filteredTypes = softwareTypes
-        .filter(type => type.toLowerCase().includes(typeFilter.toLowerCase()))
-        .sort((a, b) => {
-            const aSelected = selectedTypes.includes(a);
-            const bSelected = selectedTypes.includes(b);
-            if (aSelected && !bSelected) return -1;
-            if (!aSelected && bSelected) return 1;
-            return 0;
-        });
+    const filteredTypes = sortedTypes.filter(type =>
+        type.toLowerCase().includes(typeFilter.toLowerCase())
+    );
 
     return (
         <div className="search-bar__wrapper" ref={wrapperRef}>

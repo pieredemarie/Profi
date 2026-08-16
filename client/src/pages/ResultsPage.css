@@ -46,8 +46,12 @@
 
 
 .results-page__main-title--underline {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
 }
 
 .results-page__main {

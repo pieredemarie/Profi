@@ -142,13 +142,13 @@
     max-height: 450px;
     opacity: 1;
     padding: 20px 24px 20px 24px;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
 .results-search-bar__dropdown-list {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
 .results-search-bar__dropdown-item {
