@@ -8,12 +8,10 @@
     position: relative;
 }
 
-
 .search-bar__input-wrapper {
     flex: 1;
     position: relative;
 }
-
 
 .search-bar__dropdown-group {
     position: relative;
@@ -39,6 +37,7 @@
     border-bottom-right-radius: 0;
     border-bottom-color: transparent;
 }
+
 .search-bar__icon {
     position: absolute;
     left: 20px;
@@ -95,7 +94,6 @@
     background-color: #DEDEDE;
 }
 
-
 .search-bar__dropdown-wrapper {
     position: relative;
     display: flex;
@@ -106,40 +104,28 @@
 .search-bar__dropdown-trigger {
     height: 60px;
     width: 299px;
-    padding: 12px 32px;
+    padding: 0 24px;
     background-color: #ffffff;
     border: 1px solid #d1d5db;
     border-radius: 32px;
-    font-size: 24px;
-    font-weight: 700;
-    font-family: 'Mulish', sans-serif;
-    color: #111111;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 .search-bar__dropdown-trigger.open {
-            border-color: #3498db;
+    border-color: #3498db;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-.search-bar__arrow {
-    width: 12px;
-    height: 12px;
-    border-right: 2px solid #000;
-    border-bottom: 2px solid #000;
-    transform: rotate(45deg);
-    transition: transform 0.3s ease;
-    margin-top: -4px;
-}
-.search-bar__arrow.up {
-    transform: rotate(-135deg);
-    margin-top: 4px;
+.search-bar__dropdown-search-icon {
+    flex-shrink: 0;
 }
 
+/* --- ВЫПАДАЮЩЕЕ МЕНЮ --- */
 .search-bar__dropdown-menu {
     position: absolute;
     top: 60px;
@@ -154,7 +140,6 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 8px;
 
     max-height: 0;
     opacity: 0;
@@ -164,9 +149,39 @@
 }
 
 .search-bar__dropdown-menu.open {
-    max-height: 400px;
+    max-height: 450px;
     opacity: 1;
-    padding: 12px 32px 20px 32px;
+    padding: 20px 32px 20px 32px;
+    overflow-y: auto;
+}
+
+/* Поле поиска внутри дропдауна (фильтр по списку типов) */
+.search-bar__dropdown-search-input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Mulish', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111111;
+    text-align: left;
+    cursor: text;
+}
+.search-bar__dropdown-search-input[readonly] {
+    cursor: pointer;
+}
+
+.search-bar__dropdown-search-input::placeholder {
+    color: #7C7C7C;
+    font-weight: 500;
+}
+
+.search-bar__dropdown-list {
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
 }
 
@@ -175,30 +190,81 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #ECECEC;
     cursor: pointer;
-    transition: background 0.2s ease;
-    font-size: 24px;
-    font-weight: 500;
-    font-family: 'Mulish', sans-serif;
 }
-
-.search-bar__dropdown-checkbox {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    cursor: pointer;
+.search-bar__dropdown-item:last-child {
+    border-bottom: none;
 }
 
 .search-bar__dropdown-text {
-    font-size: 24px;
+    flex: 1;
+    min-width: 0;
+    font-size: 20px;
     font-weight: 500;
     font-family: 'Mulish', sans-serif;
     text-align: left;
-    display: block;
-    min-width: 0;
-    flex:1;
+    color: #111111;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
+/* Кастомный чекбокс — квадрат с чёрной галочкой при выборе */
+.search-bar__dropdown-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #111111;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin: 0;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.search-bar__dropdown-checkbox:checked {
+    background-color: #111111;
+    border-color: #111111;
+}
+
+.search-bar__dropdown-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 11px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Кнопка "Сбросить всё" внизу дропдауна */
+.search-bar__dropdown-reset {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    flex-shrink: 0;
+    margin-top: 12px;
+    padding-top: 12px;
+    border: none;
+    border-top: 1px solid #ECECEC;
+    background: transparent;
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #7C7C7C;
+    cursor: pointer;
+}
+.search-bar__dropdown-reset:hover {
+    color: #D00000;
+}
 
 .search-bar__button {
     height: 60px;
@@ -218,6 +284,7 @@
 .search-bar__button:hover { background-color: #2980b9; }
 
 
+/* --- ПЛАНШЕТ: дропдаун 220×40 --- */
 @media (max-width: 995px) {
     .search-bar__wrapper,
     .search-bar__wrapper *,
@@ -249,7 +316,6 @@
         height: 100%;
         padding: 0 16px 0 40px;
         font-size: 16px;
-        box-sizing: border-box;
         background-color: #ffffff;
         border: none;
     }
@@ -259,7 +325,6 @@
         display: flex;
         align-items: center;
         position: relative;
-        box-sizing: border-box;
         border-color: #717171;
     }
 
@@ -278,35 +343,51 @@
 
     .search-bar__dropdown-trigger {
         height: 40px;
-        width: 200px;
-        padding: 0 20px;
+        width: 220px;           /* было 200px */
+        padding: 0 16px;
         font-size: 16px;
         border-color: #717171;
         flex-shrink: 0;
+        gap: 6px;
+    }
+
+    .search-bar__dropdown-search-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .search-bar__dropdown-search-input {
+        font-size: 15px;
     }
 
     .search-bar__dropdown-menu {
         top: 50px;
         padding: 0 20px;
-        gap: 6px;
     }
 
     .search-bar__dropdown-menu.open {
-        padding: 10px 20px 16px 20px;
+        padding: 14px 20px 16px 20px;
+        max-height: 320px;
     }
 
     .search-bar__dropdown-item {
-        gap: 8px;
-        font-size: 16px;
+        padding: 8px 0;
     }
 
     .search-bar__dropdown-text {
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .search-bar__dropdown-checkbox {
         width: 18px;
         height: 18px;
+    }
+
+    .search-bar__dropdown-checkbox:checked::after {
+        left: 4px;
+        top: 1px;
+        width: 5px;
+        height: 9px;
     }
 
     .search-bar__button {
@@ -336,8 +417,8 @@
     }
 
     .search-bar__dropdown-trigger {
-        width: auto;
-        min-width: 130px;
+        width: 220px;
+        min-width: 220px;
     }
 
     .search-bar__button {
@@ -348,6 +429,7 @@
     }
 }
 
+/* --- МОБИЛЬНЫЕ: дропдаун 234×27 --- */
 @media (max-width: 590px) {
     .search-bar__wrapper {
         display: grid;
@@ -365,7 +447,7 @@
     .search-bar__dropdown-group {
         grid-column: 2;
         grid-row: 1;
-        width: auto;
+        width: 100%;
         min-width: 90px;
     }
 
@@ -386,17 +468,20 @@
     }
 
     .search-bar__dropdown-trigger {
+        width: 100%;
         font-size: 11px;
         padding: 0 10px;
         gap: 4px;
     }
 
-    .search-bar__arrow {
-        width: 8px;
-        height: 8px;
-        margin-top: -2px;
+    .search-bar__dropdown-search-icon {
+        width: 12px;
+        height: 12px;
     }
 
+    .search-bar__dropdown-search-input {
+        font-size: 11px;
+    }
 
     .search-bar__button {
         grid-column: 1;
@@ -409,29 +494,40 @@
         white-space: normal;
     }
 
-
     .search-bar__dropdown-menu {
         left: auto;
         right: 0;
-        width: 220px;
+        width: 234px;           /* было 220px */
         top: 31px;
-        padding: 0 16px;
+        padding: 0 14px;
     }
 
     .search-bar__dropdown-menu.open {
-        padding: 10px 16px 14px 16px;
+        padding: 10px 14px 12px 14px;
+        max-height: 260px;
     }
 
     .search-bar__dropdown-item {
-        gap: 8px;
+        padding: 6px 0;
     }
 
     .search-bar__dropdown-text {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .search-bar__dropdown-checkbox {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .search-bar__dropdown-checkbox:checked::after {
+        left: 2px;
+        top: 0px;
+        width: 4px;
+        height: 7px;
+    }
+
+    .search-bar__dropdown-reset {
+        font-size: 12px;
     }
 }

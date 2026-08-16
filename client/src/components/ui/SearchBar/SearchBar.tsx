@@ -13,6 +13,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
     const { query, suggestions, handleQueryChange } = useAutocomplete(300, selectedTypes);
 
     const [softwareTypes, setSoftwareTypes] = useState<string[]>([]);
+    const [typeFilter, setTypeFilter] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -49,12 +50,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
     const handleToggle = () => {
         setIsOpen(!isOpen);
         setShowSuggestions(false);
+        if (isOpen) setTypeFilter(''); // сбрасываем фильтр при закрытии
     };
 
     const handleCheckboxChange = (type: string) => {
         setSelectedTypes(prev =>
             prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
         );
+    };
+
+    const handleResetTypes = () => {
+        setSelectedTypes([]);
     };
 
     const handleSearch = () => {
@@ -76,6 +82,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
         setShowSuggestions(false);
         onSearch?.(value, selectedTypes);
     };
+
+    const filteredTypes = softwareTypes
+        .filter(type => type.toLowerCase().includes(typeFilter.toLowerCase()))
+        .sort((a, b) => {
+            const aSelected = selectedTypes.includes(a);
+            const bSelected = selectedTypes.includes(b);
+            if (aSelected && !bSelected) return -1;
+            if (!aSelected && bSelected) return 1;
+            return 0;
+        });
 
     return (
         <div className="search-bar__wrapper" ref={wrapperRef}>
@@ -114,29 +130,54 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onTypeChange }) 
             </div>
 
             <div className="search-bar__dropdown-wrapper">
-                <button
+                <div
                     className={`search-bar__dropdown-trigger ${isOpen ? 'open' : ''}`}
-                    onClick={handleToggle}
+                    onClick={() => !isOpen && handleToggle()}
                 >
-                    <span className="search-bar__dropdown-label">
-                        Тип ПО{selectedTypes.length > 0 ? `: ${selectedTypes.length}` : ''}
-                    </span>
-                    <div className={`search-bar__arrow ${isOpen ? 'up' : 'down'}`} />
-                </button>
+                    <svg className="search-bar__dropdown-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21L16.65 16.65" />
+                    </svg>
+
+                    <input
+                        type="text"
+                        className="search-bar__dropdown-search-input"
+                        placeholder="Тип ПО"
+                        value={isOpen ? typeFilter : (selectedTypes.length > 0 ? `Тип ПО: ${selectedTypes.length}` : '')}
+                        onChange={(e) => setTypeFilter(e.target.value)}
+                        onFocus={() => !isOpen && handleToggle()}
+                        readOnly={!isOpen}
+                    />
+                </div>
 
                 {isOpen && (
                     <div className="search-bar__dropdown-menu open">
-                        {softwareTypes.map((type) => (
-                            <label key={type} className="search-bar__dropdown-item">
-                                <span className="search-bar__dropdown-text">{type}</span>
-                                <input
-                                    type="checkbox"
-                                    className="search-bar__dropdown-checkbox"
-                                    checked={selectedTypes.includes(type)}
-                                    onChange={() => handleCheckboxChange(type)}
-                                />
-                            </label>
-                        ))}
+                        <div className="search-bar__dropdown-list">
+                            {filteredTypes.map((type) => (
+                                <label key={type} className="search-bar__dropdown-item">
+                                    <span className="search-bar__dropdown-text">{type}</span>
+                                    <input
+                                        type="checkbox"
+                                        className="search-bar__dropdown-checkbox"
+                                        checked={selectedTypes.includes(type)}
+                                        onChange={() => handleCheckboxChange(type)}
+                                    />
+                                </label>
+                            ))}
+                        </div>
+
+                        {selectedTypes.length > 0 && (
+                            <button
+                                type="button"
+                                className="search-bar__dropdown-reset"
+                                onClick={handleResetTypes}
+                            >
+                                Сбросить всё
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M18 6L6 18M6 6l12 12" />
+                                </svg>
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
