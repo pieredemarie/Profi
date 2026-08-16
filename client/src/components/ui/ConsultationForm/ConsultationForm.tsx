@@ -12,6 +12,7 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ foreignProdu
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [phoneError, setPhoneError] = useState<string | null>(null);
+    const [nameError, setNameError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -34,19 +35,31 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ foreignProdu
         }
     };
 
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+        if (nameError) setNameError(null);
+    };
+
     const validatePhone = (value: string): boolean => value.replace(/\D/g, '').length === 11;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        let hasError = false;
+
+        if (name.trim() === '') {
+            setNameError('Заполните поле ФИО корректно');
+            hasError = true;
+        }
         if (!validatePhone(phone)) {
             setPhoneError('Заполните поле с номером телефона корректно');
-            return;
+            hasError = true;
         }
+        if (hasError) return;
 
         setIsSubmitting(true);
         const result = await submitApplication({
-            full_name: name.trim() || undefined,
+            full_name: name.trim(),
             phone_number: phone,
             foreign_product_name: foreignProductName,
             partner_replacement: partnerReplacement,
@@ -62,6 +75,7 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ foreignProdu
         setName('');
         setPhone('');
         setPhoneError(null);
+        setNameError(null);
     };
 
     return (
@@ -75,24 +89,33 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({ foreignProdu
                         <input type="hidden" name="foreign_product_name" value={foreignProductName} />
 
                         <div className="consultation-form__row">
-                            <input
-                                type="text"
-                                className="consultation-form__input"
-                                placeholder="ФИО"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                            <input
-                                type="tel"
-                                className={`consultation-form__input ${phoneError ? 'consultation-form__input--error' : ''}`}
-                                placeholder="Номер телефона"
-                                value={phone}
-                                onChange={handlePhoneChange}
-                                maxLength={18}
-                            />
-                        </div>
+                            <div className="consultation-form__field">
+                                <input
+                                    type="text"
+                                    className={`consultation-form__input ${nameError ? 'consultation-form__input--error' : ''}`}
+                                    placeholder="ФИО"
+                                    value={name}
+                                    onChange={handleNameChange}
+                                />
+                                <div className="consultation-form__error-slot">
+                                    {nameError && <span className="consultation-form__error">{nameError}</span>}
+                                </div>
+                            </div>
 
-                        {phoneError && <div className="consultation-form__error">{phoneError}</div>}
+                            <div className="consultation-form__field">
+                                <input
+                                    type="tel"
+                                    className={`consultation-form__input ${phoneError ? 'consultation-form__input--error' : ''}`}
+                                    placeholder="Номер телефона"
+                                    value={phone}
+                                    onChange={handlePhoneChange}
+                                    maxLength={18}
+                                />
+                                <div className="consultation-form__error-slot">
+                                    {phoneError && <span className="consultation-form__error">{phoneError}</span>}
+                                </div>
+                            </div>
+                        </div>
 
                         <button type="submit" className="consultation-form__button" disabled={isSubmitting}>
                             {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
