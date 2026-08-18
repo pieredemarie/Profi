@@ -44,46 +44,6 @@ class ApplicationCreateController extends Controller
             'phone_number.not_regex' => 'Неверный формат телефона.',
         ]);
 
-        $validator->after(function ($validator) use ($input): void {
-            $foreignProductName = $input['foreign_product_name'] ?? '';
-            $partnerReplacement = $input['partner_replacement'] ?? null;
-
-            if ($foreignProductName === '') {
-                return;
-            }
-
-            $foreignProductExists = ImportReplacement::query()
-                ->where('foreign_product_name', $foreignProductName)
-                ->exists();
-
-            if (! $foreignProductExists) {
-                $validator->errors()->add(
-                    'foreign_product_name',
-                    'Выбранный зарубежный продукт не найден.'
-                );
-
-                return;
-            }
-
-            if ($partnerReplacement === null) {
-                return;
-            }
-
-            $partnerReplacementMatchesProduct = ImportReplacement::query()
-                ->where('foreign_product_name', $foreignProductName)
-                ->whereHas('partnerReplacements', function ($query) use ($partnerReplacement): void {
-                    $query->where('partner_product_name', $partnerReplacement);
-                })
-                ->exists();
-
-            if (! $partnerReplacementMatchesProduct) {
-                $validator->errors()->add(
-                    'partner_replacement',
-                    'Выбранная замена не соответствует зарубежному продукту.'
-                );
-            }
-        });
-
         if ($validator->fails()) {
             $errors = $validator->errors();
 
